@@ -21,7 +21,7 @@ export const site = {
 };
 
 export const nav = [
-  { label: "Services", href: "/#services" },
+  { label: "Services", href: "/#tools" },
   { label: "Tools", href: "/#tools" },
   { label: "Plans", href: "/#plans" },
   { label: "Commercial", href: "/commercial" },
@@ -85,24 +85,6 @@ export const services = [
   { name: "Comfort Plan", href: "/#plans", note: "Two tune-ups a year and priority visits." },
 ];
 
-export const symptoms = [
-  {
-    title: "It's blowing warm air",
-    cause: "Often a failing capacitor, low refrigerant or a coil that can't shed heat.",
-    check: "We check refrigerant pressure, the capacitor, the compressor start and both coils.",
-  },
-  {
-    title: "It's suddenly loud",
-    cause: "Usually a worn fan motor, a loose panel or a compressor under strain.",
-    check: "We check the fan blades and motor, mounting, and the compressor's running sound and draw.",
-  },
-  {
-    title: "My bill jumped",
-    cause: "A system working harder than it should: dirty coils, weak airflow or a leak.",
-    check: "We check coil condition, airflow, refrigerant charge and how long it runs to reach temperature.",
-  },
-];
-
 // Pinned labels on the last unit frame. at = dot position in % of the frame (desktop 1280x800, phone 576x1248);
 // cardY = where the desktop card sits; side = which side of the dot the phone tag sits.
 export const parts = [
@@ -154,9 +136,10 @@ export const stats = [
 
 // Repair tab
 type Fix = { label: string; note?: string; range: Range };
-export const repairSymptoms: { id: string; label: string; likely: string; fixes: Fix[]; big?: Fix }[] = [
+// photo: the likely part, cropped from the exploded-unit film (leak: the indoor unit from the hero film)
+export const repairSymptoms: { id: string; label: string; likely: string; photo: string; fixes: Fix[]; big?: Fix }[] = [
   {
-    id: "warm", label: "Blowing warm air", likely: "A failed capacitor or a refrigerant leak. Less often, the compressor.",
+    id: "warm", photo: "/media/parts/warm.webp", label: "Blowing warm air", likely: "A failed capacitor or a refrigerant leak. Less often, the compressor.",
     fixes: [
       { label: "Capacitor", note: "The part that starts the motors. A common Florida failure in summer heat.", range: prices.capacitor },
       { label: "Refrigerant leak", note: "Find and fix the leak, then recharge", range: prices.refrigerantLeak },
@@ -164,7 +147,7 @@ export const repairSymptoms: { id: string; label: string; likely: string; fixes:
     big: { label: "If it is the compressor", note: "Compressor replacement", range: prices.compressor },
   },
   {
-    id: "loud", label: "Loud or rattling", likely: "A worn fan motor or a loose panel. Less often, a compressor under strain.",
+    id: "loud", photo: "/media/parts/loud.webp", label: "Loud or rattling", likely: "A worn fan motor or a loose panel. Less often, a compressor under strain.",
     fixes: [
       { label: "Outdoor fan motor", note: "Grinding or squealing outside", range: prices.fanMotor },
       { label: "Indoor blower motor", note: "Rattling or humming inside", range: prices.blowerMotor },
@@ -172,7 +155,7 @@ export const repairSymptoms: { id: string; label: string; likely: string; fixes:
     big: { label: "If it is the compressor", note: "Compressor replacement", range: prices.compressor },
   },
   {
-    id: "off", label: "Won't turn on", likely: "A capacitor, contactor or thermostat. Check the breaker first.",
+    id: "off", photo: "/media/parts/off.webp", label: "Won't turn on", likely: "A capacitor, contactor or thermostat. Check the breaker first.",
     fixes: [
       { label: "Capacitor", range: prices.capacitor },
       { label: "Contactor", note: "The switch that tells the outdoor unit to run", range: prices.contactor },
@@ -181,7 +164,7 @@ export const repairSymptoms: { id: string; label: string; likely: string; fixes:
     big: { label: "If it is the control board", note: "Control board replacement", range: prices.controlBoard },
   },
   {
-    id: "leak", label: "Water leaking indoors", likely: "A blocked condensate drain line. Less often, a failed pump or coil.",
+    id: "leak", photo: "/media/parts/leak.webp", label: "Water leaking indoors", likely: "A blocked condensate drain line. Less often, a failed pump or coil.",
     fixes: [
       { label: "Drain line cleared", note: "The most common cause, and the cheapest", range: prices.drainLine },
       { label: "Condensate pump", range: prices.condensatePump },
@@ -189,7 +172,7 @@ export const repairSymptoms: { id: string; label: string; likely: string; fixes:
     big: { label: "If it is the indoor coil", note: "Evaporator coil replacement", range: prices.evaporatorCoil },
   },
   {
-    id: "bill", label: "Bill jumped", likely: "Dirty coils, weak airflow or low refrigerant.",
+    id: "bill", photo: "/media/parts/bill.webp", label: "Bill jumped", likely: "Dirty coils, weak airflow or low refrigerant.",
     fixes: [
       { label: "Coil cleaning", range: prices.coilCleaning },
       { label: "Refrigerant leak", note: "Find and fix the leak, then recharge", range: prices.refrigerantLeak },

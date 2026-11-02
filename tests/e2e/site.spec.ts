@@ -86,15 +86,16 @@ test("moving between pages keeps working after scrolling the films", async ({ pa
   expect(errors).toEqual([]);
 });
 
-test("symptom cards open one at a time", async ({ page }) => {
+test("repair tool shows a picture of the likely part for every symptom", async ({ page }) => {
   await page.goto("/");
-  const cards = page.locator("#services button[aria-expanded]");
-  await expect(cards).toHaveCount(3);
-  await cards.nth(0).click();
-  await expect(cards.nth(0)).toHaveAttribute("aria-expanded", "true");
-  await cards.nth(1).click();
-  await expect(cards.nth(1)).toHaveAttribute("aria-expanded", "true");
-  await expect(cards.nth(0)).toHaveAttribute("aria-expanded", "false");
+  const group = page.getByRole("group", { name: "What is it doing?" });
+  await group.scrollIntoViewIfNeeded();
+  for (const s of repairSymptoms) {
+    await group.getByRole("button", { name: s.label, exact: true }).click();
+    const img = page.locator("#tool-panel").getByRole("img", { name: `Likely part: ${s.likely}` });
+    await expect(img).toBeVisible();
+    await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.naturalWidth)).toBeGreaterThan(0);
+  }
 });
 
 test("feel the difference: the slider cools the room by keyboard", async ({ page }) => {
