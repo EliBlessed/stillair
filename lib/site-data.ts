@@ -29,8 +29,19 @@ export const nav = [
 
 export const prices = {
   diagnostic: { low: 89, high: 150 }, // credited to the repair if you go ahead
-  repair: { low: 150, high: 650 },
-  compressor: { low: 600, high: 2500 },
+  // Per-part ranges (researched 2026-11-02; national and Florida cost guides, see BUILD-NOTES "Repair tool prices").
+  capacitor: { low: 150, high: 350 },
+  contactor: { low: 130, high: 300 },
+  thermostat: { low: 100, high: 400 },
+  controlBoard: { low: 200, high: 800 },
+  refrigerantLeak: { low: 250, high: 1600 }, // find and fix the leak, then recharge
+  fanMotor: { low: 200, high: 700 }, // outdoor condenser fan motor
+  blowerMotor: { low: 450, high: 2000 }, // indoor blower motor
+  drainLine: { low: 75, high: 250 },
+  condensatePump: { low: 100, high: 500 },
+  coilCleaning: { low: 100, high: 400 },
+  evaporatorCoil: { low: 650, high: 2700 },
+  compressor: { low: 850, high: 2800 },
   tuneUp: { low: 89, high: 249 },
   comfortPlanPerYear: 219,
 };
@@ -140,12 +151,48 @@ export const stats = [
 ];
 
 // Repair tab
-export const repairSymptoms = [
-  { id: "warm", label: "Blowing warm air", likely: "Capacitor, refrigerant or compressor.", compressor: true },
-  { id: "loud", label: "Loud or rattling", likely: "Fan motor, loose panel or compressor strain.", compressor: true },
-  { id: "off", label: "Won't turn on", likely: "Capacitor, contactor, thermostat or a tripped breaker.", compressor: false },
-  { id: "leak", label: "Water leaking indoors", likely: "A blocked condensate drain or a frozen coil.", compressor: false },
-  { id: "bill", label: "Bill jumped", likely: "Dirty coils, weak airflow or low refrigerant.", compressor: false },
+type Fix = { label: string; note?: string; range: Range };
+export const repairSymptoms: { id: string; label: string; likely: string; fixes: Fix[]; big?: Fix }[] = [
+  {
+    id: "warm", label: "Blowing warm air", likely: "A failed capacitor or a refrigerant leak. Less often, the compressor.",
+    fixes: [
+      { label: "Capacitor", note: "The part that starts the motors. A common Florida failure in summer heat.", range: prices.capacitor },
+      { label: "Refrigerant leak", note: "Find and fix the leak, then recharge", range: prices.refrigerantLeak },
+    ],
+    big: { label: "If it is the compressor", note: "Compressor replacement", range: prices.compressor },
+  },
+  {
+    id: "loud", label: "Loud or rattling", likely: "A worn fan motor or a loose panel. Less often, a compressor under strain.",
+    fixes: [
+      { label: "Outdoor fan motor", note: "Grinding or squealing outside", range: prices.fanMotor },
+      { label: "Indoor blower motor", note: "Rattling or humming inside", range: prices.blowerMotor },
+    ],
+    big: { label: "If it is the compressor", note: "Compressor replacement", range: prices.compressor },
+  },
+  {
+    id: "off", label: "Won't turn on", likely: "A capacitor, contactor or thermostat. Check the breaker first.",
+    fixes: [
+      { label: "Capacitor", range: prices.capacitor },
+      { label: "Contactor", note: "The switch that tells the outdoor unit to run", range: prices.contactor },
+      { label: "Thermostat", range: prices.thermostat },
+    ],
+    big: { label: "If it is the control board", note: "Control board replacement", range: prices.controlBoard },
+  },
+  {
+    id: "leak", label: "Water leaking indoors", likely: "A blocked condensate drain line. Less often, a failed pump or coil.",
+    fixes: [
+      { label: "Drain line cleared", note: "The most common cause, and the cheapest", range: prices.drainLine },
+      { label: "Condensate pump", range: prices.condensatePump },
+    ],
+    big: { label: "If it is the indoor coil", note: "Evaporator coil replacement", range: prices.evaporatorCoil },
+  },
+  {
+    id: "bill", label: "Bill jumped", likely: "Dirty coils, weak airflow or low refrigerant.",
+    fixes: [
+      { label: "Coil cleaning", range: prices.coilCleaning },
+      { label: "Refrigerant leak", note: "Find and fix the leak, then recharge", range: prices.refrigerantLeak },
+    ],
+  },
 ];
 
 // Replace tab: the "$5,000 rule" (age × repair quote)

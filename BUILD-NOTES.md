@@ -135,3 +135,20 @@ A two-page static-export Next.js 16.4.2 marketing demo website for **Stillair**,
 - Header and phone menu use a CSS-only liquid glass (`.glass` in globals.css). Liquid Glass JS was not used: the Tool Library verdict says plain CSS for real sites, and the JS library screenshots the page, which misses the hero film.
 - "Feel the difference" now uses the approved matched pair (Flow S1/S2 as room-hot/room-cool.webp). The handle slides right and back once when the slider comes into view, so visitors see it drags (not with reduced motion, not after a touch).
 - Bug: `--color-base` in `@theme` makes Tailwind's `text-base` set the text COLOUR to the page background as well as the font size. Unselected tabs and the footer headings were near invisible. All `text-base` uses are now `text-[1rem]`. Don't use `text-base` in this project.
+
+## Repair tool prices, per symptom (researched 2026-11-02)
+Each symptom now shows its own likely fixes instead of one generic "Common repairs" row. Ranges are rounded from 2026 cost guides (national unless noted). They are marketing-grade sources that disagree with each other, so treat them as provisional and keep the "typical ranges, not a quote" note.
+| Fix | Range | Sources |
+|---|---|---|
+| Capacitor | $150–$350 | Florida 2026 guides (my-ccs.com, airconditionerservicepro.com), most cluster here |
+| Contactor | $130–$300 | same Florida guides |
+| Thermostat | $100–$400 | same |
+| Control board | $200–$800 | This Old House; Fixr $100–$700; Thumbtack $120–$600 |
+| Refrigerant leak found + fixed | $250–$1,600 | Angi 2026; HomeGuide leak test alone $100–$330 |
+| Outdoor fan motor | $200–$700 | Fixr 2026, This Old House, HomeAdvisor |
+| Indoor blower motor | $450–$2,000 | Fixr; HomeGuide $500–$2,300 |
+| Drain line cleared | $75–$250 | Fixr |
+| Condensate pump | $100–$500 | Fixr; HomeAdvisor avg $175 |
+| Coil cleaning | $100–$400 | Fixr / cost guides |
+| Evaporator coil | $650–$2,700 | This Old House (Apr 2026) $627–$2,700; HomeAdvisor $600–$2,000 |
+| Compressor | $850–$2,800 | Bob Vila / CallHomeRangers avg $1,600 ($850–$2,400); HVACProSales $1,200–$2,800. Replaces the 2023 Miami $600–$2,500 figure, which looked low. |
