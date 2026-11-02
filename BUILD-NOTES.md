@@ -152,3 +152,11 @@ Each symptom now shows its own likely fixes instead of one generic "Common repai
 | Coil cleaning | $100–$400 | Fixr / cost guides |
 | Evaporator coil | $650–$2,700 | This Old House (Apr 2026) $627–$2,700; HomeAdvisor $600–$2,000 |
 | Compressor | $850–$2,800 | Bob Vila / CallHomeRangers avg $1,600 ($850–$2,400); HVACProSales $1,200–$2,800. Replaces the 2023 Miami $600–$2,500 figure, which looked low. |
+
+## Exploded unit film (2026-11-02)
+- Source: Flow Frames to Video, start S3 (closed unit), end E1 (exploded edit of S3), 1080p, 24 fps. v1 rejected (front split into doors, then morphed); v2 used. Raw clips in the project files (`stillair-2026-11-02/flow/`).
+- Frames 1–96 of the clip: it comes apart by frame ~74, then holds so the labels can finish. WebP quality 62.
+  - Desktop `public/media/unit/`: 1280x800, clip scaled to 920 wide on black so the whole unit sits between the heading and the labels (2.2 MB, loads after first scroll).
+  - Phone `public/media/unit-phone/`: 576x1248, clip cropped to the parts and placed mid-screen on black (1.6 MB). No separate 9:16 Flow clip needed: the black background makes the padding invisible.
+- Phones show the five part names as chips (notes hidden) so the unit stays visible.
+- Non-hero scenes now lazy-load their first frame.

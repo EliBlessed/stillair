@@ -128,7 +128,7 @@ export function ScrollScene({ frames, stills, grads, alt, scroll = 150, priority
           <>
             <picture>
               <source media="(max-width: 767px)" srcSet={name(frames.phoneDir, 1)} />
-              <img ref={first} src={name(frames.dir, 1)} alt="" width={1376} height={768} fetchPriority={priority ? "high" : undefined} className={layer} onError={(e) => { e.currentTarget.style.display = "none"; }} />
+              <img ref={first} src={name(frames.dir, 1)} alt="" width={1376} height={768} fetchPriority={priority ? "high" : undefined} loading={priority ? undefined : "lazy"} className={layer} onError={(e) => { e.currentTarget.style.display = "none"; }} />
             </picture>
             <canvas ref={canvas} className={layer} style={{ opacity: 0 }} />
           </>

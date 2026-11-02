@@ -117,7 +117,7 @@ export const parts = [
 export const heroHold = 0.45;
 export const frames = {
   hero: { dir: "/media/hero", phoneDir: "/media/hero-phone", count: 212 }, // outdoor install (Gemini) -> push into the wall -> room pulls back and cools (Gemini, reversed)
-  unit: { dir: "/media/unit", phoneDir: "/media/unit", count: 0 },
+  unit: { dir: "/media/unit", phoneDir: "/media/unit-phone", count: 96 }, // Flow U1 v2 (S3 -> E1), frames 1-96: comes apart by ~74, then holds. Phone = same frames on a tall black canvas.
 };
 
 export const stills = {
