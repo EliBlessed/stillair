@@ -107,14 +107,16 @@ export function DecisionTool() {
     document.getElementById(`tab-${n}`)?.focus();
   };
   return (
-    <section id="tools" className="section scroll-mt-20">
+    <section id="tools" className="section scroll-mt-20 md:min-h-[80svh]">
       <div className="wrap">
-        <h2 className="h2 max-w-[14ch]" data-reveal>Repair, replace or install?</h2>
+        <h2 className="h2 max-w-[14ch]" data-reveal>
+          Repair, replace or <span className="text-ice">install?</span>
+        </h2>
         <p className="lead mt-5" data-reveal="1">Three quick questions, typical South Florida ranges, and a clear next step.</p>
         <div className="card mt-10 p-5 md:mt-14 md:p-10" data-reveal="2">
-          <div role="tablist" aria-label="Repair, replace or install" className="mb-8 flex gap-2" onKeyDown={onKey}>
+          <div role="tablist" aria-label="Repair, replace or install" className="mb-8 flex gap-1.5 sm:gap-2" onKeyDown={onKey}>
             {tabs.map((t, i) => (
-              <button key={t} id={`tab-${i}`} role="tab" type="button" className="chip flex-1 sm:flex-none sm:px-8" aria-selected={tab === i} aria-controls="tool-panel" tabIndex={tab === i ? 0 : -1} onClick={() => setTab(i)}>{t}</button>
+              <button key={t} id={`tab-${i}`} role="tab" type="button" className="chip flex-1 whitespace-nowrap px-3 text-sm sm:flex-none sm:px-8 sm:text-base" aria-selected={tab === i} aria-controls="tool-panel" tabIndex={tab === i ? 0 : -1} onClick={() => setTab(i)}>{t}</button>
             ))}
           </div>
           <div id="tool-panel" role="tabpanel" aria-labelledby={`tab-${tab}`}>

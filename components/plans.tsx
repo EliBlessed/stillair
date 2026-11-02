@@ -3,9 +3,11 @@ import { BookLink } from "./book-link";
 
 export function Plans() {
   return (
-    <section id="plans" className="section scroll-mt-20">
+    <section id="plans" className="section scroll-mt-20 md:min-h-[80svh]">
       <div className="wrap">
-        <h2 className="h2" data-reveal>Plans and prices</h2>
+        <h2 className="h2" data-reveal>
+          Plans and <span className="text-ice">prices</span>
+        </h2>
         <p className="small mt-4" data-reveal="1">{site.rangeNote}</p>
         <ul className="mt-10 grid items-stretch gap-4 md:mt-14 md:grid-cols-3 md:gap-6">
           {plans.map((p, i) => (

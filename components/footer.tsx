@@ -14,20 +14,20 @@ export function Footer() {
             <p className="mt-4 max-w-xs text-muted">{site.tagline} {site.area}.</p>
           </div>
           <div>
-            <h2 className="mb-3 text-base font-medium">Contact</h2>
+            <p className="mb-3 text-base font-medium">Contact</p>
             <ul className="space-y-2 text-muted">
               <li><a href={site.phoneHref} className="num hover:text-ink">{site.phone}</a></li>
               <li><a href={`mailto:${site.email}`} className="break-all hover:text-ink">{site.email}</a></li>
             </ul>
           </div>
           <div>
-            <h2 className="mb-3 text-base font-medium">Pages</h2>
+            <p className="mb-3 text-base font-medium">Pages</p>
             <ul className="space-y-2 text-muted">
-              {nav.map((l) => <li key={l.label}><Link href={l.href} className="hover:text-ink">{l.label}</Link></li>)}
+              {nav.map((l) => <li key={l.label}><Link href={l.href} prefetch={false} className="hover:text-ink">{l.label}</Link></li>)}
             </ul>
           </div>
           <div>
-            <h2 className="mb-3 text-base font-medium">Services</h2>
+            <p className="mb-3 text-base font-medium">Services</p>
             <ul className="space-y-2 text-muted">
               {services.map((s) => <li key={s.name}>{s.name}</li>)}
             </ul>

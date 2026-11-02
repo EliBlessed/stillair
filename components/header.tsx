@@ -17,12 +17,12 @@ export function Header() {
   return (
     <header className="fixed inset-x-3 top-3 z-50 mx-auto max-w-[1180px]">
       <div className="flex items-center justify-between gap-3 rounded-full border border-line bg-base/70 py-2 pr-2 pl-5 backdrop-blur-xl">
-        <Link href="/" className="text-xl font-semibold tracking-[-0.03em]" onClick={() => setOpen(false)}>
+        <Link href="/" prefetch={false} className="text-xl font-semibold tracking-[-0.03em]" onClick={() => setOpen(false)}>
           {site.brand}
         </Link>
         <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
           {nav.map((l) => (
-            <Link key={l.label} href={l.href} className="rounded-full px-4 py-2 text-[0.95rem] text-muted transition-colors hover:text-ink">
+            <Link key={l.label} href={l.href} prefetch={false} className="rounded-full px-4 py-2 text-[0.95rem] text-muted transition-colors hover:text-ink">
               {l.label}
             </Link>
           ))}
@@ -54,7 +54,7 @@ export function Header() {
       >
         <nav aria-label="Mobile" className="flex flex-col">
           {nav.map((l) => (
-            <Link key={l.label} href={l.href} onClick={() => setOpen(false)} className="rounded-2xl px-4 py-3.5 text-lg">
+            <Link key={l.label} href={l.href} prefetch={false} onClick={() => setOpen(false)} className="rounded-2xl px-4 py-3.5 text-lg">
               {l.label}
             </Link>
           ))}

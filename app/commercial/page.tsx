@@ -43,7 +43,9 @@ export default function Commercial() {
             <Img src="/media/commercial-ducts.webp" alt="Ductwork running through a commercial ceiling" width={1376} height={768} loading="lazy" />
           </div>
           <div>
-            <h2 className="h2" data-reveal>What we handle</h2>
+            <h2 className="h2" data-reveal>
+              What we <span className="text-ice">handle</span>
+            </h2>
             <ul className="mt-8 grid gap-3 sm:grid-cols-2">
               {commercial.cards.map((c, i) => (
                 <li key={c.name} className="card p-6" data-reveal={Math.min(i + 1, 3)}>
@@ -60,7 +62,9 @@ export default function Commercial() {
         <div className="wrap">
           <div className="card flex flex-col gap-6 p-7 md:flex-row md:items-end md:justify-between md:p-12" style={{ background: "#142130" }} data-reveal>
             <div className="max-w-2xl">
-              <h2 className="h2 !text-[clamp(1.75rem,4.5vw,3rem)]">{commercial.contract.title}</h2>
+              <h2 className="h2 !text-[clamp(1.75rem,4.5vw,3rem)]">
+                Maintenance <span className="text-ice">contracts</span>
+              </h2>
               <p className="mt-4 text-xl">{commercial.contract.text}</p>
             </div>
             <p className="num text-2xl font-medium text-ice">{commercial.contract.price}</p>
@@ -71,7 +75,9 @@ export default function Commercial() {
       <section id="survey" className="section scroll-mt-20">
         <div className="wrap grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
           <div data-reveal>
-            <h2 className="h2">Site survey</h2>
+            <h2 className="h2">
+              Site <span className="text-ice">survey</span>
+            </h2>
             <p className="lead mt-5">Tell us about the building. {site.area}.</p>
           </div>
           <div data-reveal="1"><DemoForm id="survey" fields={fields} submit="Request a site survey" /></div>
