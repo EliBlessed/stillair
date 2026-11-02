@@ -1,7 +1,5 @@
 "use client";
 import { useEffect, useRef, type ReactNode } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Img } from "./img";
 
 type Props = {
@@ -31,7 +29,6 @@ export function ScrollScene({ frames, stills, grads, alt, scroll = 150, priority
   useEffect(() => {
     const el = root.current!;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    gsap.registerPlugin(ScrollTrigger);
 
     // shortcut: breakpoint is read once; rotating across 768px needs a reload to swap frame sets.
     const dir = matchMedia("(max-width: 767px)").matches ? frames.phoneDir : frames.dir;
@@ -76,7 +73,13 @@ export function ScrollScene({ frames, stills, grads, alt, scroll = 150, priority
       draw();
     }
 
-    const ctx = gsap.context(() => {
+    // gsap loads after hydration (not in the first HTML), then pins the scene.
+    let revert = () => {};
+    let dead = false;
+    Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(([{ default: gsap }, { ScrollTrigger }]) => {
+      if (dead) return;
+      gsap.registerPlugin(ScrollTrigger);
+      const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: el,
         start: "top top",
@@ -88,10 +91,13 @@ export function ScrollScene({ frames, stills, grads, alt, scroll = 150, priority
           if (hasFrames) { want = Math.round(self.progress * (frames.count - 1)); draw(); }
         },
       });
-    }, el);
+      }, el);
+      revert = () => ctx.revert();
+    });
 
     return () => {
-      ctx.revert();
+      dead = true;
+      revert();
       wake.forEach((t) => removeEventListener(t, loadRest));
       el.style.removeProperty("--p");
     };
@@ -110,6 +116,9 @@ export function ScrollScene({ frames, stills, grads, alt, scroll = 150, priority
             width={1376}
             height={768}
             fetchPriority={priority && i === 0 && !hasFrames ? "high" : undefined}
+            srcSet={priority && i === 0 ? `${src.replace(/\.webp$/, "-800.webp")} 800w, ${src} 1376w` : undefined} // phones get the 800px copy (keep one beside the first hero still)
+            sizes={priority && i === 0 ? "100vw" : undefined}
+            loading={priority && i === 0 ? undefined : "lazy"} // React preloads every eager img in <head>; only the first hero still should compete for bandwidth
             className={layer}
             style={stills.length > 1 ? (i ? { opacity: "var(--p)" } : undefined) : { transform: "scale(calc(1 + var(--p) * 0.08))" }}
           />

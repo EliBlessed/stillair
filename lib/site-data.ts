@@ -112,7 +112,30 @@ export const stills = {
   unit: ["/media/unit-assembled.webp"],
 };
 
-export const temps = { hot: 91, cool: 72 };
+export const temps = { hot: 91, mid: 84, cool: 72 };
+
+export const heroStages = [
+  { temp: 91, text: "Heavy air." },
+  { temp: 84, text: "Breathing again." },
+  { temp: 72, text: "Cool. Finally." },
+];
+
+// Until /media/room-hot.webp and /media/room-cool.webp exist, use the hero stills.
+export const roomCompare = {
+  hot: "/media/hero-hot.webp",
+  cool: "/media/hero-cool.webp",
+  caption: "Drag to cool it down.",
+};
+
+// Sources:
+// - 3 tons: typical cooling load for an average Florida single-family home.
+// - 14.3 SEER2 & Jan 1, 2023: U.S. Department of Energy regional efficiency standard for
+//   new split-system central air conditioners in the Southeast (10 CFR 430.32(c), effective Jan 1, 2023).
+export const stats = [
+  { value: "3 tons", label: "Typical size for a Florida home" },
+  { value: "14.3 SEER2", label: "Federal minimum efficiency for new central AC in the Southeast since 2023" },
+  { value: "Jan 1, 2023", label: "When the Southeast efficiency rule took effect" },
+];
 
 // Repair tab
 export const repairSymptoms = [

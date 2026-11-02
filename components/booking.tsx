@@ -13,10 +13,12 @@ const fields: Field[] = [
 
 export function Booking() {
   return (
-    <section id="book" className="section scroll-mt-20">
+    <section id="book" className="section scroll-mt-20 md:min-h-[80svh]">
       <div className="wrap grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
         <div>
-          <h2 className="h2 mb-8" data-reveal>Book a visit</h2>
+          <h2 className="h2 mb-8" data-reveal>
+            Book a <span className="text-ice">visit</span>
+          </h2>
           <div data-reveal="1"><DemoForm id="book" fields={fields} submit="Request a visit" prefill /></div>
         </div>
         <div className="frame aspect-[4/5] lg:aspect-auto lg:min-h-[32rem]" data-reveal="2">

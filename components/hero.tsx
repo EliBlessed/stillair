@@ -1,4 +1,6 @@
-import { frames, stills, temps, site } from "@/lib/site-data";
+"use client";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { frames, heroStages, site, stills, temps } from "@/lib/site-data";
 import { ScrollScene } from "./scroll-scene";
 import { BookLink } from "./book-link";
 
@@ -8,30 +10,99 @@ const grads: [string, string] = [
 ];
 
 export function Hero() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const h1Ref = useRef<HTMLHeadingElement>(null);
+  const turbRef = useRef<SVGFETurbulenceElement>(null);
+  const dispRef = useRef<SVGFEDisplacementMapElement>(null);
+  const [stageIdx, setStageIdx] = useState(0);
+
+  useEffect(() => {
+    const scene = wrapRef.current?.closest(".scene") as HTMLElement | null;
+    if (!scene) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      dispRef.current?.setAttribute("scale", "0");
+      if (h1Ref.current) h1Ref.current.style.filter = "none";
+      const id = requestAnimationFrame(() => setStageIdx(heroStages.length - 1));
+      return () => cancelAnimationFrame(id);
+    }
+
+    // Shimmer starts on the first scroll, not on load: a filtered h1 counts as a late repaint and
+    // pushed phone LCP from ~0.9s to ~3.4s.
+    let armed = false;
+    const arm = () => { armed = true; sync(); };
+    addEventListener("scroll", arm, { once: true, passive: true });
+
+    const sync = () => {
+      const raw = scene.style.getPropertyValue("--p");
+      const p = raw ? parseFloat(raw) : 0;
+      const t = Math.round(temps.hot - (temps.hot - temps.cool) * p);
+      const nextIdx = t > temps.mid ? 0 : t > temps.cool ? 1 : 2;
+      setStageIdx((prev) => (prev === nextIdx ? prev : nextIdx));
+
+      // Heat shimmer while readout is above 84°, settling sharp and still by 72°
+      const strength =
+        t > temps.mid
+          ? 1.2 + ((t - temps.mid) / (temps.hot - temps.mid)) * 2.3
+          : Math.max(0, ((t - temps.cool) / (temps.mid - temps.cool)) * 1.0);
+
+      if (armed && dispRef.current && turbRef.current && h1Ref.current) {
+        if (strength <= 0.05) {
+          dispRef.current.setAttribute("scale", "0");
+          h1Ref.current.style.filter = "none";
+        } else {
+          dispRef.current.setAttribute("scale", strength.toFixed(2));
+          turbRef.current.setAttribute("baseFrequency", `0.015 ${(0.055 + p * 0.025).toFixed(4)}`);
+          h1Ref.current.style.filter = "url(#hero-shimmer)";
+        }
+      }
+    };
+
+    sync();
+    const mo = new MutationObserver(sync);
+    mo.observe(scene, { attributes: true, attributeFilter: ["style"] });
+    return () => { mo.disconnect(); removeEventListener("scroll", arm); };
+  }, []);
+
+  const stage = heroStages[stageIdx];
+
   return (
     <ScrollScene frames={frames.hero} stills={stills.hero} grads={grads} alt="Cool. Finally. A room cooling from 91 to 72 degrees" priority>
+      <svg className="pointer-events-none absolute size-0" aria-hidden>
+        <defs>
+          <filter id="hero-shimmer" x="-5%" y="-10%" width="110%" height="120%">
+            <feTurbulence ref={turbRef} type="fractalNoise" baseFrequency="0.015 0.055" numOctaves={2} seed={3} result="noise" />
+            <feDisplacementMap ref={dispRef} in="SourceGraphic" in2="noise" scale={3.5} xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+
       {/* heat tint: amber at the hot end, gone by the cool end */}
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden style={{ background: "radial-gradient(110% 80% at 75% 100%, var(--color-heat), transparent 70%)", opacity: "calc((1 - var(--p)) * 0.38)" }} />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-base/90 via-base/30 to-base/20" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-base/90 via-base/35 to-base/55 md:bg-gradient-to-r md:from-base/90 md:via-base/45 md:to-transparent" aria-hidden />
 
-      <p className="absolute top-24 right-5 z-10 rounded-full border border-line bg-base/60 px-3 py-1 text-xs text-muted backdrop-blur-md md:right-8">{site.demoLabel}</p>
+      <p className="absolute right-5 bottom-3 z-10 rounded-full border border-line bg-base/60 px-3 py-1 text-xs text-muted backdrop-blur-md md:top-24 md:right-8 md:bottom-auto">{site.demoLabel}</p>
 
-      <div className="wrap relative mt-auto flex flex-col gap-8 pt-40 pb-10 md:gap-10 md:pb-14">
-        <div className="readout num text-[clamp(5.5rem,22vw,15rem)] leading-[0.85] font-medium" style={{ "--hot": temps.hot, "--cool": temps.cool } as React.CSSProperties}>
-          <span className="sr-only-text">Temperature falls from {temps.hot} to {temps.cool} degrees Fahrenheit</span>
-        </div>
-        <div className="grid items-end gap-8 md:grid-cols-[1.4fr_1fr]">
-          <h1 className="h1">{site.tagline}</h1>
-          <div className="flex flex-col gap-6">
-            <p className="lead !text-ink/80">Air conditioning repair, replacement and installation. {site.area}.</p>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <BookLink />
-              <a href={site.phoneHref} className="btn">Call <span className="num">{site.phone}</span></a>
-            </div>
+      <div ref={wrapRef} className="wrap relative flex flex-1 flex-col justify-between gap-6 pt-24 pb-12 md:justify-end md:gap-8 md:pt-32 md:pb-14">
+        {/* Phone: headline, line and buttons at the top above the unit. Desktop: on the left under the readout. */}
+        <div className="order-1 flex max-w-xl flex-col gap-5 md:order-2 md:gap-6">
+          <h1 ref={h1Ref} className="h1">{site.tagline}</h1>
+          <p className="lead !text-ink/85">Air conditioning repair, replacement and installation. {site.area}.</p>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <BookLink />
+            <a href={site.phoneHref} className="btn">Call <span className="num">{site.phone}</span></a>
           </div>
+        </div>
+
+        {/* Temperature readout + Geist Mono stage caption under it */}
+        <div className="order-2 mt-auto max-w-xl md:order-1 md:mt-0">
+          <div className="readout num text-[clamp(4.75rem,20vw,12rem)] leading-[0.85] font-medium" style={{ "--hot": temps.hot, "--cool": temps.cool } as CSSProperties}>
+            <span className="sr-only-text">Temperature falls from {temps.hot} to {temps.cool} degrees Fahrenheit</span>
+          </div>
+          <p className="num mt-3 text-base tracking-tight text-ink/90 md:text-lg" aria-live="polite">
+            <span className="text-muted">{stage.temp}°</span> {stage.text}
+          </p>
         </div>
       </div>
     </ScrollScene>
   );
 }
-

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { central, centralRoom, mini, money, site } from "@/lib/site-data";
 import { Img } from "./img";
 import { Money } from "./roll";
+import { BookLink } from "./book-link";
 
 const mid = central[1]; // the typical Florida home
 
@@ -15,7 +16,7 @@ export function SizePicker() {
   const [i, setI] = useState(0);
   const o = options[i];
   return (
-    <section id="size" className="section scroll-mt-20">
+    <section id="size" className="section scroll-mt-20 md:min-h-[80svh]">
       <div className="wrap grid items-center gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-20">
         <div className="frame aspect-[4/3] lg:aspect-[5/4]" data-reveal>
           {options.map((x, n) => (
@@ -33,7 +34,9 @@ export function SizePicker() {
           ))}
         </div>
         <div>
-          <h2 className="h2" data-reveal>What size do I need?</h2>
+          <h2 className="h2" data-reveal>
+            What <span className="text-ice">size</span> do I need?
+          </h2>
           <div role="group" aria-label="Room size" className="mt-8 flex flex-wrap gap-2" data-reveal="1">
             {options.map((x, n) => <button key={x.id} type="button" className="chip num" aria-pressed={n === i} onClick={() => setI(n)}>{x.chip}</button>)}
           </div>
@@ -47,6 +50,9 @@ export function SizePicker() {
             {o.extra && <p className="small num">Also: {o.extra}</p>}
             <p className="small mt-4">{site.rangeNote}</p>
             <p className="small mt-2">{site.sizeFootnote}</p>
+            <div className="mt-6">
+              <BookLink need="Install" message={`Size guide: ${o.title} (${o.room}).`} />
+            </div>
           </div>
         </div>
       </div>

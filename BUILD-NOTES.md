@@ -65,3 +65,62 @@ A two-page static-export Next.js 16.4.2 marketing demo website for **Stillair**,
 - **Still photographs**: All 12 `.webp` photos and `og.png` in `public/media/` are custom-generated dark-moody placeholders ready to be replaced with final photography at the same paths.
 - **Canonical domain**: `app/layout.tsx`, `app/robots.ts`, and `app/sitemap.ts` use `https://stillair.example` as the placeholder base URL; update to your Cloudflare Pages domain when deploying.
 
+## Round 2
+
+### Changes Built
+1. **Hero Pull-Back Reveal, Stage Captions & Heat Shimmer (`components/hero.tsx`, `lib/site-data.ts`)**
+   - **Desktop vs. Phone Composition**: On desktop (`>= 768px`), the temperature readout, stage caption, headline, supporting line, and CTA buttons sit on the left of the frame (`max-w-xl`). On phone (`< 768px`), the headline, supporting line, and buttons sit at the top of the frame above the unit, while the readout and stage caption anchor the bottom.
+   - **Stage Captions**: Added `heroStages` in `lib/site-data.ts` rendered in `Geist Mono` directly under the temperature readout, updating with scroll: `91° "Heavy air."` → `84° "Breathing again."` → `72° "Cool. Finally."`.
+   - **SVG Heat Shimmer**: Added `#hero-shimmer` (`<feTurbulence>` + `<feDisplacementMap>`) applied to the hero `h1` while the readout is above `84°`, with displacement strength following scroll and settling to `0` (`filter: none`) by `72°`. Disabled completely when `prefers-reduced-motion: reduce` is active.
+   - Left `components/scroll-scene.tsx`, `components/smooth-scroll.tsx`, `next.config.ts`, and `package.json` untouched.
+2. **"Feel the difference" Room Wipe Slider (`components/feel-difference.tsx`, `lib/site-data.ts`)**
+   - Placed immediately after `"Sound familiar?"` on the home page.
+   - Stacks `roomCompare.hot` and `roomCompare.cool` (pointing at `/media/hero-hot.webp` and `/media/hero-cool.webp` in `lib/site-data.ts` until `/media/room-hot.webp` and `/media/room-cool.webp` are supplied), both with `loading="lazy"`, `width={1376}`, and `height={768}`.
+   - Starts on the hot side (`91°F`); dragging right wipes the cool room across and counts `91°F → 72°F` on the handle.
+   - Built on a native `<input type="range">` with pointer capture so mouse drag, touch drag, and keyboard `ArrowLeft` / `ArrowRight` keys all move the wipe and update `aria-valuetext`. Respects `prefers-reduced-motion: reduce` (no easing).
+3. **One Emphasised Ice-Blue Word per `h2`**
+   - Updated every `h2` across `/` and `/commercial` so each has exactly one word in ice blue (`#7CC8F2` / `.text-ice`):
+     - `Sound` **`familiar?`**
+     - `Feel the` **`difference.`**
+     - `Every part,` **`checked.`**
+     - `Repair, replace or` **`install?`**
+     - `What` **`size`** `do I need?`
+     - `Built for` **`Florida.`**
+     - `Plans and` **`prices`**
+     - `How it` **`works`**
+     - `Book a` **`visit`**
+     - `What we` **`handle`** (`/commercial`)
+     - `Maintenance` **`contracts`** (`/commercial`)
+     - `Site` **`survey`** (`/commercial`)
+4. **Stat Row + Call to Action (`components/stat-row.tsx`, `lib/site-data.ts`)**
+   - Added `stats` in `lib/site-data.ts` (with DOE 10 CFR 430.32(c) and Florida residential load sources documented in comments) and rendered `StatRow` directly after `"What size do I need?"`:
+     - `"3 tons"` — `"Typical size for a Florida home"`
+     - `"14.3 SEER2"` — `"Federal minimum efficiency for new central AC in the Southeast since 2023"`
+     - `"Jan 1, 2023"` — `"When the Southeast efficiency rule took effect"`
+   - Repeated the two hero buttons (`Book a visit` and `Call (305) 555-0142`) underneath.
+5. **One Idea per Screen (`md:min-h-[80svh]`) & Centred `"Sound familiar?"`**
+   - Every section on the home page now has one focus, one clear action, and at least `min-h-[80svh]` on desktop.
+   - Rebuilt `"Sound familiar?"` (`components/symptoms.tsx`) into a single centred column (`mx-auto max-w-2xl`) on desktop with a single `"Book a diagnostic visit"` action below the accordion cards.
+6. **Phone Tab Wrapping Fix (`components/decision-tool.tsx`, `app/globals.css`)**
+   - Added `whitespace-nowrap` and compact mobile padding (`px-3 text-sm sm:px-8 sm:text-base`) on the `"Repair, replace or install?"` tabs and `.chip` so `Repair`, `Replace`, and `Install` stay on a single line at `390px` and `360px` without breaking mid-word.
+
+### What Was Checked in the Browser (`360px`, `390px`, `1440px`)
+- Ran `pnpm build` and `pnpm lint` (0 errors, 0 warnings), served `out/` locally, and verified in headless Chrome via CDP:
+  - **Slider interaction**: Dragging with the mouse moves the wipe and updates the handle readout (`91°F` → `78°F`); pressing `ArrowRight` / `ArrowLeft` moves it step-by-step (`78°F` → `77°F`).
+  - **Tabs on one line**: At both `390px` and `360px`, `Repair`, `Replace`, and `Install` share the exact same `top` coordinate, `44px` height, and `white-space: nowrap`.
+  - **`h2` blue word check**: Every `h2` on `/` (9 headings) and `/commercial` (3 headings) has `blueCount === 1`, `singleWord === true`, and computed color `rgb(124, 200, 242)` (`#7CC8F2`).
+  - **Hero scroll & reduced motion**: Confirmed stage captions transition `91° Heavy air.` → `84° Breathing again.` → `72° Cool. Finally.`, SVG displacement scales from `3.50` at `91°` to `0` (`filter: none`) at `72°`, and `prefers-reduced-motion: reduce` rests at `72° Cool. Finally.` with `filter: none`.
+  - **No horizontal scroll**: `document.documentElement.scrollWidth === window.innerWidth` at `1440px`, `390px`, and `360px`.
+  - **Zero console errors**: `0` console errors, `0` uncaught exceptions, and `0` failed network requests across `/` and `/commercial`.
+
+
+
+## Claude fixes on top of round 2 (2026-11-02)
+- Phone speed (Lighthouse 13.5, home): 76 → 92–96 (median 94); commercial 89 → 96–97; desktop 99.
+  - gsap and Lenis load after hydration (dynamic import), not in the first HTML.
+  - Heat shimmer starts on the first scroll: a filtered h1 counted as a late repaint (LCP ~3.4 s).
+  - Only the first hero still is fetched eagerly; others are `loading="lazy"` (React preloads every eager img).
+  - 800px phone copies: `hero-hot-800.webp`, `commercial-rooftop-800.webp` (via srcSet). Keep a `-800` copy beside the first hero still.
+  - Geist Mono isn't preloaded (numbers swap in).
+  - Commercial first screen uses a CSS-only entrance (`.rise`) instead of the JS reveal, so it paints before JavaScript.
+- Customer tests: `pnpm build && pnpm test:e2e` (`tests/e2e/site.spec.ts`, 14 checks × desktop, laptop, tablet, phone, iPhone). `tests/serve.mjs` serves out/ with clean URLs like Cloudflare (`pnpm preview`).
