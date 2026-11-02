@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { money, prices, repairSymptoms } from "../../lib/site-data";
 
 // What a customer does on the site, at every screen size. Run after `pnpm build`.
 
@@ -85,6 +86,41 @@ test("feel the difference: dragging across the middle of the picture cools the r
   await page.mouse.up();
   const temp = parseInt((await slider.getAttribute("aria-valuetext")) ?? "91", 10);
   expect(temp).toBeLessThanOrEqual(73);
+});
+
+test("repair tool: every symptom shows exactly its own fixes and the prices from the data file", async ({ page }) => {
+  await page.goto("/");
+  const group = page.getByRole("group", { name: "What is it doing?" });
+  await group.scrollIntoViewIfNeeded();
+  const panel = page.locator("#tool-panel");
+  for (const s of repairSymptoms) {
+    await group.getByRole("button", { name: s.label, exact: true }).click();
+    await expect(group.getByRole("button", { name: s.label, exact: true })).toHaveAttribute("aria-pressed", "true");
+    await expect(panel.getByText(`Most likely: ${s.likely}`)).toBeVisible();
+    const expected = [
+      { label: "Diagnostic visit", price: money(prices.diagnostic) },
+      ...s.fixes.map((f) => ({ label: f.label, price: money(f.range) })),
+      ...(s.big ? [{ label: s.big.label, price: money(s.big.range) }] : []),
+    ];
+    // Each row: a bold label and a price whose screen-reader text is the exact range (the visible digits roll).
+    const rows = panel.locator("div > p.font-medium:first-child");
+    await expect(rows).toHaveText(expected.map((e) => e.label));
+    const shown = await panel.locator(".num > .sr-only-text").allTextContents();
+    expect(shown).toEqual(expected.map((e) => e.price));
+    // After the roll animation the visible numbers match too.
+    await expect(panel.locator(".num > [aria-hidden]").last()).toHaveText(expected[expected.length - 1].price.replace(/\s/g, ""), { timeout: 3000 });
+  }
+});
+
+test("repair tool: the compressor only appears for warm air and noise", async ({ page }) => {
+  await page.goto("/");
+  const group = page.getByRole("group", { name: "What is it doing?" });
+  await group.scrollIntoViewIfNeeded();
+  for (const s of repairSymptoms) {
+    await group.getByRole("button", { name: s.label, exact: true }).click();
+    const hasCompressor = await page.locator("#tool-panel").getByText("If it is the compressor").count();
+    expect(hasCompressor, s.label).toBe(["warm", "loud"].includes(s.id) ? 1 : 0);
+  }
 });
 
 test("repair, replace or install: tabs fit on one line and each gives an answer", async ({ page }) => {
