@@ -29,7 +29,7 @@ export function Footer() {
           <div>
             <p className="mb-3 text-[1rem] font-medium">Services</p>
             <ul className="space-y-2 text-muted">
-              {services.map((s) => <li key={s.name}>{s.name}</li>)}
+              {services.map((s) => <li key={s.name}><Link href={s.href} prefetch={false} className="hover:text-ink">{s.name}</Link></li>)}
             </ul>
           </div>
         </div>
