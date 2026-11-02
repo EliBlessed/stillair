@@ -79,7 +79,7 @@ export function FeelDifference() {
           {/* Base layer: hot room */}
           <Img
             src={roomCompare.hot}
-            alt="Warm South Florida room at 91 degrees before cooling"
+            alt="Warm South Florida room at 91 degrees with no air conditioner"
             width={1376}
             height={768}
             loading="lazy"
@@ -93,7 +93,7 @@ export function FeelDifference() {
           >
             <Img
               src={roomCompare.cool}
-              alt="Cool room at 72 degrees after cooling"
+              alt="The same room at 72 degrees with a wall air conditioner running"
               width={1376}
               height={768}
               loading="lazy"

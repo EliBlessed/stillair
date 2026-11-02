@@ -133,7 +133,7 @@ export const heroStages = [
   { temp: 72, text: "Cool. Finally." },
 ];
 
-// Matched hot/cool pair of the same room (Flow stills S1 and S2, approved 2026-11-02).
+// Matched pair of the same room: hot with no AC (S1b), cool with the AC running (S2c). Gemini edits, aligned 2026-11-02.
 export const roomCompare = {
   hot: "/media/room-hot.webp",
   cool: "/media/room-cool.webp",
