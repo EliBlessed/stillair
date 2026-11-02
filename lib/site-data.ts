@@ -103,13 +103,15 @@ export const symptoms = [
   },
 ];
 
+// Pinned labels on the last unit frame. at = dot position in % of the frame (desktop 1280x800, phone 576x1248);
+// cardY = where the desktop card sits; side = which side of the dot the phone tag sits.
 export const parts = [
-  { name: "Fan and motor", note: "We check the blades, bearings and motor draw." },
-  { name: "Condenser coil", note: "We check for dirt, damage and poor heat transfer." },
-  { name: "Compressor", note: "We check its start, running draw and sound." },
-  { name: "Capacitor", note: "We test it against its rating and look for swelling." },
-  { name: "Refrigerant lines", note: "We check insulation, kinks and signs of a leak." },
-];
+  { name: "Fan and motor", note: "We check the blades, bearings and motor draw.", at: [47.7, 33.5], cardY: 26, phone: [54, 46.6], side: "right" },
+  { name: "Condenser coil", note: "We check for dirt, damage and poor heat transfer.", at: [42.2, 56.2], cardY: 40, phone: [44.5, 58.5], side: "left" },
+  { name: "Compressor", note: "We check its start, running draw and sound.", at: [48.4, 63.8], cardY: 54, phone: [56, 61.2], side: "left" },
+  { name: "Capacitor", note: "We test it against its rating and look for swelling.", at: [53.3, 65], cardY: 68, phone: [64, 62.1], side: "right" },
+  { name: "Refrigerant lines", note: "We check insulation, kinks and signs of a leak.", at: [50.4, 75.2], cardY: 82, phone: [59, 67.1], side: "right" },
+] as const;
 
 // Frame sequences. Drop frame-0001.webp … frame-NNNN.webp into the folder and set `count`.
 // count 0 = no frames yet: the scene shows the still placeholders instead.
