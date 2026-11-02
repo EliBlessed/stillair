@@ -40,8 +40,8 @@ function Repair() {
       <Out need="Repair" message={`Symptom: ${s.label}.`} cta="Book a diagnostic visit">
         <p className="mb-2 text-muted">Most likely: {s.likely}</p>
         <Row label="Diagnostic visit" note="Credited to the repair if you go ahead" range={prices.diagnostic} />
-        <Row label="Common repairs" range={prices.repair} />
-        {s.compressor && <Row label="If it is the compressor" note="Compressor replacement" range={prices.compressor} />}
+        {s.fixes.map((f) => <Row key={f.label} label={f.label} note={f.note} range={f.range} />)}
+        {s.big && <Row label={s.big.label} note={s.big.note} range={s.big.range} />}
       </Out>
     </>
   );
