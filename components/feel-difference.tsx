@@ -116,6 +116,9 @@ export function FeelDifference() {
             onPointerUp={() => setDragging(false)}
             onPointerCancel={() => setDragging(false)}
             className="peer absolute inset-0 z-20 m-0 h-full w-full cursor-ew-resize opacity-0"
+            // Inline height: the global input[type="range"] rule (2rem) is unlayered and beats h-full,
+            // which left only a thin strip at the top of the picture draggable.
+            style={{ height: "100%", touchAction: "pan-y" }}
           />
 
           {/* Wipe vertical line */}

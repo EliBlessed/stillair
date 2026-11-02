@@ -72,6 +72,21 @@ test("feel the difference: the slider cools the room by keyboard", async ({ page
   await expect(slider).toHaveAttribute("aria-valuetext", "72°F");
 });
 
+test("feel the difference: dragging across the middle of the picture cools the room", async ({ page }) => {
+  await page.goto("/");
+  const slider = page.getByRole("slider", { name: "Drag to cool it down" });
+  const frame = page.locator("#feel .frame");
+  await frame.scrollIntoViewIfNeeded();
+  const box = (await frame.boundingBox())!;
+  const y = box.y + box.height / 2; // where the handle sits, not the top edge
+  await page.mouse.move(box.x + box.width * 0.1, y);
+  await page.mouse.down();
+  for (let i = 2; i <= 10; i++) await page.mouse.move(box.x + box.width * (i / 10), y);
+  await page.mouse.up();
+  const temp = parseInt((await slider.getAttribute("aria-valuetext")) ?? "91", 10);
+  expect(temp).toBeLessThanOrEqual(73);
+});
+
 test("repair, replace or install: tabs fit on one line and each gives an answer", async ({ page }) => {
   await page.goto("/");
   const tabs = page.getByRole("tab");
