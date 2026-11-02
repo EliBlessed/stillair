@@ -8,7 +8,7 @@ const grads: [string, string] = [
   "radial-gradient(90% 70% at 70% 40%, #1f4157, #0a0f14 75%)",
 ];
 
-const CARD_X = 64; // desktop cards start here (% of the frame), right of the unit
+const CARD_X = 78; // desktop cards start here (% of the frame), right of the unit
 
 export function UnitScene() {
   return (
@@ -19,6 +19,8 @@ export function UnitScene() {
           so % positions on the frame line up on every screen size. */}
       <div className="pointer-events-none absolute inset-0 [container-type:size]">
         <div className="unit-box absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          {/* the yard darkens around the unit as it comes apart */}
+          <div className="unit-dim absolute inset-0" aria-hidden />
           <svg className="absolute inset-0 hidden size-full md:block" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
             {parts.map((p, i) => (
               <polyline key={p.name} className="pin" style={{ "--i": i } as CSSProperties} points={`${p.at[0]},${p.at[1]} ${CARD_X - 2},${p.cardY} ${CARD_X},${p.cardY}`} fill="none" stroke="var(--color-ice)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
@@ -31,7 +33,7 @@ export function UnitScene() {
                 <span className="absolute hidden size-2.5 -translate-1/2 rounded-full bg-ice shadow-[0_0_0_4px_rgb(124_200_242/0.25)] md:block" style={{ left: `${p.at[0]}%`, top: `${p.at[1]}%` }} aria-hidden />
                 <span className="absolute size-2 -translate-1/2 rounded-full bg-ice shadow-[0_0_0_3px_rgb(124_200_242/0.25)] md:hidden" style={{ left: `${p.phone[0]}%`, top: `${p.phone[1]}%` }} aria-hidden />
                 {/* desktop: card at the end of the line */}
-                <div className="absolute hidden w-64 -translate-y-1/2 rounded-xl border border-line bg-base/75 px-4 py-2.5 backdrop-blur-md md:block" style={{ left: `${CARD_X}%`, top: `${p.cardY}%` }}>
+                <div className="absolute hidden w-56 -translate-y-1/2 rounded-xl border border-line bg-base/75 px-4 py-2.5 backdrop-blur-md md:block" style={{ left: `${CARD_X}%`, top: `${p.cardY}%` }}>
                   <p className="text-[0.95rem] font-medium">{p.name}</p>
                   <p className="text-sm text-muted">{p.note}</p>
                 </div>

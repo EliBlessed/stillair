@@ -123,6 +123,9 @@ select.field { appearance: none; background-image: linear-gradient(45deg, transp
 /* Exploded unit: a box the size of the frame as object-cover draws it (desktop 1280x800, phone 576x1248). */
 .unit-box { --ar: calc(576 / 1248); width: max(100cqw, 100cqh * var(--ar)); height: max(100cqh, 100cqw / var(--ar)); }
 @media (min-width: 768px) { .unit-box { --ar: calc(1280 / 800); } }
+/* Dim the yard around the unit with scroll (centre/size in frame %, phone frames are cropped differently). */
+.unit-dim { --at: 50% 60%; --size: 64% 30%; background: radial-gradient(var(--size) at var(--at), transparent 45%, rgb(10 15 20 / 0.88)); opacity: min(1, calc(var(--p) * 1.4)); }
+@media (min-width: 768px) { .unit-dim { --at: 51% 50%; --size: 36% 58%; } }
 /* Pinned labels appear one by one once the unit has come apart (frame ~74 of 96 = --p 0.77). */
 .pin { opacity: clamp(0, calc((var(--p) - (0.78 + var(--i) * 0.035)) * 25), 1); }
 
