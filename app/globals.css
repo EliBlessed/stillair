@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-base: #0a0f14;
+  --color-raised: #111821;
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-ink: #e8eef3;
+  --color-muted: #8a97a6;
+  --color-ice: #7cc8f2;
+  --color-heat: #e8892b; /* hero hot state only */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+html {
+  background: var(--color-base);
+  color: var(--color-ink);
+  scroll-padding-top: 6rem;
+}
+body {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  overflow-x: clip;
+  overflow-wrap: anywhere;
+}
+.wrap > *, .grid > * { min-width: 0; }
+::selection { background: var(--color-ice); color: var(--color-base); }
+:focus-visible { outline: 2px solid var(--color-ice); outline-offset: 3px; border-radius: 6px; }
+
+@layer components {
+/* Layout */
+.wrap { width: 100%; max-width: 1280px; margin-inline: auto; padding-inline: 1.25rem; }
+@media (min-width: 768px) { .wrap { padding-inline: 2rem; } }
+.section { padding-block: clamp(3rem, 8vw, 4.5rem); } /* 96px apart on phone, 144px on desktop */
+
+/* Type: about 44px phone, 96px desktop, tight tracking */
+.h1 { font-size: clamp(2.75rem, 8vw, 6rem); line-height: 0.95; letter-spacing: -0.03em; font-weight: 600; text-wrap: balance; }
+.h2 { font-size: clamp(2.25rem, 5.4vw, 4rem); line-height: 1; letter-spacing: -0.03em; font-weight: 600; text-wrap: balance; }
+.lead { font-size: clamp(1.0625rem, 1.6vw, 1.25rem); color: var(--color-muted); max-width: 34rem; }
+.num { font-family: var(--font-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.small { font-size: 0.875rem; color: var(--color-muted); }
+.sr-only-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Surfaces */
+.frame { border-radius: 24px; overflow: hidden; background: radial-gradient(120% 90% at 30% 10%, #1a2a38, var(--color-raised) 60%); position: relative; }
+.frame > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.card { background: var(--color-raised); border: 1px solid var(--color-line); border-radius: 24px; }
+
+/* Buttons are pills */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  min-height: 3rem; padding: 0 1.5rem; border-radius: 999px; font-weight: 500; font-size: 1rem;
+  border: 1px solid var(--color-line); color: var(--color-ink); background: transparent;
+  transition: transform 160ms var(--ease-out), background-color 160ms ease, border-color 160ms ease;
+  cursor: pointer; text-align: center;
+}
+.btn:active { transform: scale(0.97); }
+.btn-ice { background: var(--color-ice); color: var(--color-base); border-color: var(--color-ice); }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { border-color: rgba(255, 255, 255, 0.28); background: rgba(255, 255, 255, 0.05); }
+  .btn-ice:hover { background: #a2d9f7; border-color: #a2d9f7; }
+}
+
+/* Chips (size picker, symptoms, tabs) */
+.chip {
+  min-height: 2.75rem; padding: 0 1.1rem; border-radius: 999px; border: 1px solid var(--color-line);
+  background: transparent; color: var(--color-ink); cursor: pointer;
+  transition: transform 160ms var(--ease-out), background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.chip:active { transform: scale(0.97); }
+.chip[aria-pressed="true"], .chip[aria-selected="true"] { background: var(--color-ice); color: var(--color-base); border-color: var(--color-ice); }
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover:not([aria-pressed="true"]):not([aria-selected="true"]) { background: rgba(255, 255, 255, 0.06); }
+}
+
+/* Form fields */
+.field { width: 100%; min-height: 3rem; padding: 0.7rem 1rem; border-radius: 14px; background: var(--color-base); color: var(--color-ink); border: 1px solid rgba(255, 255, 255, 0.16); font: inherit; transition: border-color 160ms ease; }
+.field:focus-visible { outline: 2px solid var(--color-ice); outline-offset: 2px; border-color: var(--color-ice); border-radius: 14px; }
+.field[aria-invalid="true"] { border-color: #ff8f8f; }
+textarea.field { min-height: 7rem; resize: vertical; }
+select.field { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--color-muted) 50%), linear-gradient(135deg, var(--color-muted) 50%, transparent 50%); background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 2.5rem; }
+.err { color: #ffb0b0; font-size: 0.875rem; margin-top: 0.35rem; }
+
+}
+
+/* Range sliders */
+input[type="range"] { width: 100%; accent-color: var(--color-ice); height: 2rem; cursor: pointer; }
+
+/* Scroll scene: --p (0 to 1) is set by ScrollScene. Without motion or script it rests at the end state. */
+.scene { --p: 1; }
+@media (prefers-reduced-motion: no-preference) { .scene { --p: 0; } }
+.readout { counter-reset: t round(calc(var(--hot) - (var(--hot) - var(--cool)) * var(--p)), 1); color: color-mix(in oklab, var(--color-heat) calc((1 - var(--p)) * 100%), var(--color-ice)); }
+.readout::before { content: counter(t); }
+.readout::after { content: "°F"; font-size: 0.4em; vertical-align: top; margin-left: 0.1em; }
+.part {
+  --k: clamp(0, calc((var(--p) - (0.12 + var(--i) * 0.14)) * 7), 1);
+  opacity: var(--k); transform: translateX(calc((1 - var(--k)) * 3rem));
+}
+
+/* Accordion: grid rows 0fr to 1fr, no JS measuring */
+.acc { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 260ms var(--ease-out); }
+.acc > div { overflow: hidden; }
+.acc[data-open="true"] { grid-template-rows: 1fr; }
+
+/* Entrances: hidden only when script and motion are both available, so content never depends on them */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); }
+  [data-reveal][data-in] { opacity: 1; transform: none; }
+  [data-reveal="1"] { transition-delay: 70ms; }
+  [data-reveal="2"] { transition-delay: 140ms; }
+  [data-reveal="3"] { transition-delay: 210ms; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
