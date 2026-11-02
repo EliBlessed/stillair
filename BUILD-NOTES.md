@@ -124,3 +124,9 @@ A two-page static-export Next.js 16.4.2 marketing demo website for **Stillair**,
   - Geist Mono isn't preloaded (numbers swap in).
   - Commercial first screen uses a CSS-only entrance (`.rise`) instead of the JS reveal, so it paints before JavaScript.
 - Customer tests: `pnpm build && pnpm test:e2e` (`tests/e2e/site.spec.ts`, 14 checks × desktop, laptop, tablet, phone, iPhone). `tests/serve.mjs` serves out/ with clean URLs like Cloudflare (`pnpm preview`).
+
+## Hero film (Claude, 2026-11-02)
+- 212 frames at 12 fps: the outdoor install (Gemini clip, first 8.2 s only, because the pipe vanishes after that), a 0.5 s crossfade, then the room clip played in reverse so the camera pulls back as the room cools.
+- `heroHold = 0.45` in `lib/site-data.ts`: the readout stays at 91° while the outdoor part plays, then counts down to 72°. CSS gets it as `--hold` and works out the cooling progress `--c`.
+- Phone uses a 576x720 centre crop of the same frames. Dedicated 9:16 clips would frame the room better later.
+- Checked: lint, types, 56/56 customer tests (desktop, laptop, tablet, phone), phone Lighthouse 94–98 with a gzip server.

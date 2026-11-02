@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { frames, heroStages, site, stills, temps } from "@/lib/site-data";
+import { frames, heroHold, heroStages, site, stills, temps } from "@/lib/site-data";
 import { ScrollScene } from "./scroll-scene";
 import { BookLink } from "./book-link";
 
@@ -34,7 +34,7 @@ export function Hero() {
 
     const sync = () => {
       const raw = scene.style.getPropertyValue("--p");
-      const p = raw ? parseFloat(raw) : 0;
+      const p = Math.min(1, Math.max(0, ((raw ? parseFloat(raw) : 0) - heroHold) / (1 - heroHold)));
       const t = Math.round(temps.hot - (temps.hot - temps.cool) * p);
       const nextIdx = t > temps.mid ? 0 : t > temps.cool ? 1 : 2;
       setStageIdx((prev) => (prev === nextIdx ? prev : nextIdx));
@@ -66,7 +66,7 @@ export function Hero() {
   const stage = heroStages[stageIdx];
 
   return (
-    <ScrollScene frames={frames.hero} stills={stills.hero} grads={grads} alt="Cool. Finally. A room cooling from 91 to 72 degrees" priority>
+    <ScrollScene frames={frames.hero} stills={stills.hero} grads={grads} alt="Cool. Finally. An air conditioner being installed, then a room cooling from 91 to 72 degrees" priority scroll={350} hold={heroHold}>
       <svg className="pointer-events-none absolute size-0" aria-hidden>
         <defs>
           <filter id="hero-shimmer" x="-5%" y="-10%" width="110%" height="120%">
@@ -77,7 +77,7 @@ export function Hero() {
       </svg>
 
       {/* heat tint: amber at the hot end, gone by the cool end */}
-      <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden style={{ background: "radial-gradient(110% 80% at 75% 100%, var(--color-heat), transparent 70%)", opacity: "calc((1 - var(--p)) * 0.38)" }} />
+      <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden style={{ background: "radial-gradient(110% 80% at 75% 100%, var(--color-heat), transparent 70%)", opacity: "calc((1 - var(--c)) * 0.38)" }} />
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-base/90 via-base/35 to-base/55 md:bg-gradient-to-r md:from-base/90 md:via-base/45 md:to-transparent" aria-hidden />
 
       <p className="absolute right-5 bottom-3 z-10 rounded-full border border-line bg-base/60 px-3 py-1 text-xs text-muted backdrop-blur-md md:top-24 md:right-8 md:bottom-auto">{site.demoLabel}</p>

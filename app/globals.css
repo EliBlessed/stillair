@@ -98,7 +98,9 @@ input[type="range"] { width: 100%; accent-color: var(--color-ice); height: 2rem;
 /* Scroll scene: --p (0 to 1) is set by ScrollScene. Without motion or script it rests at the end state. */
 .scene { --p: 1; }
 @media (prefers-reduced-motion: no-preference) { .scene { --p: 0; } }
-.readout { counter-reset: t round(calc(var(--hot) - (var(--hot) - var(--cool)) * var(--p)), 1); color: color-mix(in oklab, var(--color-heat) calc((1 - var(--p)) * 100%), var(--color-ice)); }
+/* --c is the cooling progress: it stays 0 for the first --hold of the scroll (the outdoor install), then runs 0 to 1. */
+.scene { --c: clamp(0, (var(--p) - var(--hold, 0)) / (1 - var(--hold, 0)), 1); }
+.readout { counter-reset: t round(calc(var(--hot) - (var(--hot) - var(--cool)) * var(--c)), 1); color: color-mix(in oklab, var(--color-heat) calc((1 - var(--c)) * 100%), var(--color-ice)); }
 .readout::before { content: counter(t); }
 .readout::after { content: "°F"; font-size: 0.4em; vertical-align: top; margin-left: 0.1em; }
 .part {

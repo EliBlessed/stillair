@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { Img } from "./img";
 
 type Props = {
@@ -9,6 +9,7 @@ type Props = {
   alt: string;
   scroll?: number; // pinned scroll distance in vh
   priority?: boolean; // first screen: fetchpriority high
+  hold?: number; // share of the scroll before cooling starts (sets --hold, read as --c in CSS)
   children: ReactNode;
 };
 
@@ -20,7 +21,7 @@ const layer = "pointer-events-none absolute inset-0 h-full w-full object-cover";
  * variable --p, which children and the layers below read directly. Reduced motion: no pin, no
  * frames, rests at --p: 1 (see globals.css).
  */
-export function ScrollScene({ frames, stills, grads, alt, scroll = 150, priority, children }: Props) {
+export function ScrollScene({ frames, stills, grads, alt, scroll = 150, priority, hold, children }: Props) {
   const root = useRef<HTMLElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const first = useRef<HTMLImageElement>(null);
@@ -104,11 +105,11 @@ export function ScrollScene({ frames, stills, grads, alt, scroll = 150, priority
   }, [frames, hasFrames, scroll]);
 
   return (
-    <section ref={root} className="scene relative isolate flex min-h-svh flex-col overflow-hidden bg-base" aria-label={alt}>
+    <section ref={root} className="scene relative isolate flex min-h-svh flex-col overflow-hidden bg-base" aria-label={alt} style={hold ? ({ "--hold": hold } as CSSProperties) : undefined}>
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
         <div className="absolute inset-0" style={{ background: grads[0] }} />
         <div className="absolute inset-0" style={{ background: grads[1], opacity: "var(--p)" }} />
-        {stills.map((src, i) => (
+        {!hasFrames && stills.map((src, i) => (
           <Img
             key={src}
             src={src}

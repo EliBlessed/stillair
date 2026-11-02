@@ -102,8 +102,10 @@ export const parts = [
 
 // Frame sequences. Drop frame-0001.webp … frame-NNNN.webp into the folder and set `count`.
 // count 0 = no frames yet: the scene shows the still placeholders instead.
+// The hero holds at 91° while the outdoor install plays (frames 1–98 of 212), then cools.
+export const heroHold = 0.45;
 export const frames = {
-  hero: { dir: "/media/hero", phoneDir: "/media/hero-phone", count: 0 },
+  hero: { dir: "/media/hero", phoneDir: "/media/hero-phone", count: 212 }, // outdoor install (Gemini) -> push into the wall -> room pulls back and cools (Gemini, reversed)
   unit: { dir: "/media/unit", phoneDir: "/media/unit", count: 0 },
 };
 
