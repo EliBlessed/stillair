@@ -82,25 +82,26 @@ export function Hero() {
 
       <p className="absolute right-5 bottom-3 z-10 rounded-full border border-line bg-base/60 px-3 py-1 text-xs text-muted backdrop-blur-md md:top-24 md:right-8 md:bottom-auto">{site.demoLabel}</p>
 
-      <div ref={wrapRef} className="wrap relative flex flex-1 flex-col justify-between gap-6 pt-24 pb-12 md:justify-end md:gap-8 md:pt-32 md:pb-14">
-        {/* Phone: headline, line and buttons at the top above the unit. Desktop: on the left under the readout. */}
-        <div className="order-1 flex max-w-xl flex-col gap-5 md:order-2 md:gap-6">
-          <h1 ref={h1Ref} className="h1">{site.tagline}</h1>
-          <p className="lead !text-ink/85">Air conditioning repair, replacement and installation. {site.area}.</p>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <BookLink />
-            <a href={site.phoneHref} className="btn">Call <span className="num">{site.phone}</span></a>
-          </div>
-        </div>
-
-        {/* Temperature readout + Geist Mono stage caption under it */}
-        <div className="order-2 mt-auto max-w-xl md:order-1 md:mt-0">
+      <div ref={wrapRef} className="wrap relative flex flex-1 flex-col gap-6 pt-28 pb-12 md:justify-end md:gap-8 md:pt-32 md:pb-14">
+        {/* Same order on every screen: readout and stage caption, then headline and line, then buttons.
+            Phone: buttons sit at the bottom (mt-auto). Desktop: everything sits low on the left. */}
+        <div className="max-w-xl">
           <div className="readout num text-[clamp(4.75rem,20vw,12rem)] leading-[0.85] font-medium" style={{ "--hot": temps.hot, "--cool": temps.cool } as CSSProperties}>
             <span className="sr-only-text">Temperature falls from {temps.hot} to {temps.cool} degrees Fahrenheit</span>
           </div>
           <p className="num mt-3 text-[1rem] tracking-tight text-ink/90 md:text-lg" aria-live="polite">
             <span className="text-muted">{stage.temp}°</span> {stage.text}
           </p>
+        </div>
+
+        <div className="flex max-w-xl flex-col gap-5 md:gap-6">
+          <h1 ref={h1Ref} className="h1">{site.tagline}</h1>
+          <p className="lead !text-ink/85">Air conditioning repair, replacement and installation. {site.area}.</p>
+        </div>
+
+        <div className="mt-auto flex max-w-xl flex-col gap-3 sm:flex-row md:-mt-2">
+          <BookLink />
+          <a href={site.phoneHref} className="btn">Call <span className="num">{site.phone}</span></a>
         </div>
       </div>
     </ScrollScene>
