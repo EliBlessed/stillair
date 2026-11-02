@@ -104,7 +104,10 @@ export function ScrollScene({ frames, stills, grads, alt, scroll = 150, priority
     };
   }, [frames, hasFrames, scroll]);
 
+  // The plain div is React's own parent: ScrollTrigger's pin wraps <section> in a pin-spacer, and
+  // without this wrapper React can't remove the section on a page change (removeChild error).
   return (
+    <div>
     <section ref={root} className="scene relative isolate flex min-h-svh flex-col overflow-hidden bg-base" aria-label={alt} style={hold ? ({ "--hold": hold } as CSSProperties) : undefined}>
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden>
         <div className="absolute inset-0" style={{ background: grads[0] }} />
@@ -136,6 +139,7 @@ export function ScrollScene({ frames, stills, grads, alt, scroll = 150, priority
       </div>
       {children}
     </section>
+    </div>
   );
 }
 
