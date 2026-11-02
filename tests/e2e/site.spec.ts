@@ -158,7 +158,7 @@ test("repair tool: the compressor only appears for warm air and noise", async ({
   }
 });
 
-test("repair, replace or install: tabs fit on one line and each gives an answer", async ({ page }) => {
+test("repair or replace: tabs fit on one line and each gives an answer", async ({ page }) => {
   await page.goto("/");
   const tabs = page.getByRole("tab");
   await tabs.first().scrollIntoViewIfNeeded();
@@ -172,8 +172,7 @@ test("repair, replace or install: tabs fit on one line and each gives an answer"
   await page.getByRole("tab", { name: "Replace" }).click();
   await expect(panel).toContainText(/Repair it|Replacing is likely smarter/);
   await expect(panel).toContainText("rule of thumb");
-  await page.getByRole("tab", { name: "Install" }).click();
-  await expect(panel).toContainText("Mini-split");
+  await expect(page.getByRole("tab")).toHaveCount(2); // Install lives in the size picker
 });
 
 test("size picker updates the room and the price", async ({ page }) => {
