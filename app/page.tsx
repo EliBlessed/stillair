@@ -1,5 +1,4 @@
 import { Hero } from "@/components/hero";
-import { Symptoms } from "@/components/symptoms";
 import { FeelDifference } from "@/components/feel-difference";
 import { UnitScene } from "@/components/unit-scene";
 import { DecisionTool } from "@/components/decision-tool";
@@ -18,7 +17,6 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Symptoms />
       <FeelDifference />
       <UnitScene />
       <DecisionTool />

@@ -90,7 +90,7 @@ export function Hero() {
             <span className="sr-only-text">Temperature falls from {temps.hot} to {temps.cool} degrees Fahrenheit</span>
           </div>
           <p className="num mt-3 text-[1rem] tracking-tight text-ink/90 md:text-lg" aria-live="polite">
-            <span className="text-muted">{stage.temp}°</span> {stage.text}
+            {stage.text}
           </p>
         </div>
 

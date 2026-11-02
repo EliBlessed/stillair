@@ -16,42 +16,42 @@ export function SizePicker() {
   const [i, setI] = useState(0);
   const o = options[i];
   return (
-    <section id="size" className="section scroll-mt-20 md:min-h-[80svh]">
-      <div className="wrap grid items-center gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-20">
-        <div className="frame aspect-[4/3] lg:aspect-[5/4]" data-reveal>
-          {options.map((x, n) => (
-            <Img
-              key={x.id}
-              src={x.photo}
-              alt={n === i ? `${x.room}, a typical room for ${x.title}` : ""}
-              aria-hidden={n !== i}
-              width={1376}
-              height={768}
-              loading="lazy"
-              className="absolute inset-0"
-              style={{ opacity: n === i ? 1 : 0, transition: "opacity 400ms var(--ease-out)" }}
-            />
-          ))}
-        </div>
-        <div>
-          <h2 className="h2" data-reveal>
-            What <span className="text-ice">size</span> do I need?
-          </h2>
-          <div role="group" aria-label="Room size" className="mt-8 flex flex-wrap gap-2" data-reveal="1">
-            {options.map((x, n) => <button key={x.id} type="button" className="chip num" aria-pressed={n === i} onClick={() => setI(n)}>{x.chip}</button>)}
+    <section id="size" className="section scroll-mt-20">
+      <div className="wrap">
+        <h2 className="h2" data-reveal>
+          What <span className="text-ice">size</span> do I need?
+        </h2>
+        {/* The room fills the section; the picker sits in a glass card in its corner (below it on phones). */}
+        <div className="relative mt-8 md:mt-12" data-reveal="1">
+          <div className="frame aspect-[4/3] md:aspect-[16/9]">
+            {options.map((x, n) => (
+              <Img
+                key={x.id}
+                src={x.photo}
+                alt={n === i ? `${x.room}, a typical room for ${x.title}` : ""}
+                aria-hidden={n !== i}
+                width={1376}
+                height={768}
+                loading="lazy"
+                className="absolute inset-0"
+                style={{ opacity: n === i ? 1 : 0, transition: "opacity 400ms var(--ease-out)" }}
+              />
+            ))}
           </div>
-          <div className="mt-8" aria-live="polite" data-reveal="2">
-            <p className="text-sm text-muted">Typical size</p>
-            <p className="text-2xl font-medium tracking-tight">{o.title}</p>
-            <p className="mt-3 text-lg">{o.room}</p>
-            <p className="text-muted">{o.sqft} (typical)</p>
-            <p className="mt-6 text-sm text-muted">Typical installed price</p>
-            <p className="text-[clamp(2.25rem,6vw,3.5rem)] leading-tight font-medium"><Money range={o.price} /></p>
-            {o.extra && <p className="small num">Also: {o.extra}</p>}
-            <p className="small mt-4">{site.rangeNote}</p>
-            <p className="small mt-2">{site.sizeFootnote}</p>
-            <div className="mt-6">
-              <BookLink need="Install" message={`Size guide: ${o.title} (${o.room}).`} />
+          <div className="mt-4 rounded-[20px] border border-line bg-base/75 p-5 backdrop-blur-xl lg:absolute lg:right-5 lg:bottom-5 lg:mt-0 lg:w-[24rem] lg:p-6">
+            <div role="group" aria-label="Room size" className="flex flex-wrap gap-2">
+              {options.map((x, n) => <button key={x.id} type="button" className="chip num" aria-pressed={n === i} onClick={() => setI(n)}>{x.chip}</button>)}
+            </div>
+            <div className="mt-5" aria-live="polite">
+              <p className="text-xl font-medium tracking-tight">{o.title}</p>
+              <p className="text-muted">{o.room}, {o.sqft} (typical)</p>
+              <p className="mt-4 text-sm text-muted">Typical installed price</p>
+              <p className="text-[clamp(2rem,5vw,2.75rem)] leading-tight font-medium"><Money range={o.price} /></p>
+              {o.extra && <p className="small num">Also: {o.extra}</p>}
+              <p className="small mt-3">{site.rangeNote} {site.sizeFootnote}</p>
+              <div className="mt-5">
+                <BookLink need="Install" message={`Size guide: ${o.title} (${o.room}).`} />
+              </div>
             </div>
           </div>
         </div>
@@ -59,4 +59,3 @@ export function SizePicker() {
     </section>
   );
 }
-

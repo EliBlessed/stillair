@@ -2,18 +2,19 @@
 import { useState, type KeyboardEvent, type ReactNode } from "react";
 import { central, installChoices, mini, prices, repairSymptoms, rule, site, type Range } from "@/lib/site-data";
 import { Money } from "./roll";
+import { Img } from "./img";
 import { BookLink } from "./book-link";
 
 const tabs = ["Repair", "Replace", "Install"] as const;
 
 function Row({ label, note, range }: { label: string; note?: string; range: Range }) {
   return (
-    <div className="flex flex-col gap-1 border-t border-line py-5 first:border-t-0 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+    <div className="flex flex-col gap-1 border-t border-line py-4 first:border-t-0 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
       <div>
         <p className="font-medium">{label}</p>
         {note && <p className="small">{note}</p>}
       </div>
-      <p className="text-[clamp(1.75rem,5vw,3rem)] leading-none font-medium whitespace-nowrap"><Money range={range} /></p>
+      <p className="text-[clamp(1.5rem,3.5vw,2.25rem)] leading-none font-medium whitespace-nowrap"><Money range={range} /></p>
     </div>
   );
 }
@@ -38,10 +39,20 @@ function Repair() {
         {repairSymptoms.map((x) => <button key={x.id} type="button" className="chip" aria-pressed={x.id === id} onClick={() => setId(x.id)}>{x.label}</button>)}
       </div>
       <Out need="Repair" message={`Symptom: ${s.label}.`} cta="Book a diagnostic visit">
-        <p className="mb-2 text-muted">Most likely: {s.likely}</p>
-        <Row label="Diagnostic visit" note="Credited to the repair if you go ahead" range={prices.diagnostic} />
-        {s.fixes.map((f) => <Row key={f.label} label={f.label} note={f.note} range={f.range} />)}
-        {s.big && <Row label={s.big.label} note={s.big.note} range={s.big.range} />}
+        <div className="grid gap-6 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-10">
+          {/* the likely part, so the answer is a picture first and prices second */}
+          <div className="frame aspect-[4/3] self-start">
+            {repairSymptoms.map((x) => (
+              <Img key={x.id} src={x.photo} alt={x.id === id ? `Likely part: ${x.likely}` : ""} aria-hidden={x.id !== id} width={560} height={420} loading="lazy" className="absolute inset-0" style={{ opacity: x.id === id ? 1 : 0, transition: "opacity 300ms var(--ease-out)" }} />
+            ))}
+          </div>
+          <div>
+            <p className="mb-2 text-lg font-semibold tracking-tight md:text-xl">Most likely: {s.likely}</p>
+            <Row label="Diagnostic visit" note="Credited to the repair if you go ahead" range={prices.diagnostic} />
+            {s.fixes.map((f) => <Row key={f.label} label={f.label} note={f.note} range={f.range} />)}
+            {s.big && <Row label={s.big.label} note={s.big.note} range={s.big.range} />}
+          </div>
+        </div>
       </Out>
     </>
   );
@@ -107,12 +118,14 @@ export function DecisionTool() {
     document.getElementById(`tab-${n}`)?.focus();
   };
   return (
-    <section id="tools" className="section scroll-mt-20 md:min-h-[80svh]">
+    <section id="tools" className="section scroll-mt-20">
       <div className="wrap">
-        <h2 className="h2 max-w-[14ch]" data-reveal>
-          Repair, replace or <span className="text-ice">install?</span>
-        </h2>
-        <p className="lead mt-5" data-reveal="1">Three quick questions, typical South Florida ranges, and a clear next step.</p>
+        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-10">
+          <h2 className="h2 max-w-[14ch]" data-reveal>
+            Repair, replace or <span className="text-ice">install?</span>
+          </h2>
+          <p className="lead md:max-w-sm" data-reveal="1">Tell us what it is doing. You get the likely cause, typical South Florida ranges and a clear next step.</p>
+        </div>
         <div className="card mt-10 p-5 md:mt-14 md:p-10" data-reveal="2">
           <div role="tablist" aria-label="Repair, replace or install" className="mb-8 flex gap-1.5 sm:gap-2" onKeyDown={onKey}>
             {tabs.map((t, i) => (
