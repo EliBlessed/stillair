@@ -106,11 +106,11 @@ export const symptoms = [
 // Pinned labels on the last unit frame. at = dot position in % of the frame (desktop 1280x800, phone 576x1248);
 // cardY = where the desktop card sits; side = which side of the dot the phone tag sits.
 export const parts = [
-  { name: "Fan and motor", note: "We check the blades, bearings and motor draw.", at: [47.7, 33.5], cardY: 26, phone: [54, 46.6], side: "right" },
-  { name: "Condenser coil", note: "We check for dirt, damage and poor heat transfer.", at: [42.2, 56.2], cardY: 40, phone: [44.5, 58.5], side: "left" },
-  { name: "Compressor", note: "We check its start, running draw and sound.", at: [48.4, 63.8], cardY: 54, phone: [56, 61.2], side: "left" },
-  { name: "Capacitor", note: "We test it against its rating and look for swelling.", at: [53.3, 65], cardY: 68, phone: [64, 62.1], side: "right" },
-  { name: "Refrigerant lines", note: "We check insulation, kinks and signs of a leak.", at: [50.4, 75.2], cardY: 82, phone: [59, 67.1], side: "right" },
+  { name: "Fan and motor", note: "We check the blades, bearings and motor draw.", at: [50.5, 24], cardY: 20, phone: [49, 46], side: "right" },
+  { name: "Condenser coil", note: "We check for dirt, damage and poor heat transfer.", at: [43.5, 58], cardY: 35, phone: [36, 64], side: "left" },
+  { name: "Compressor", note: "We check its start, running draw and sound.", at: [51.5, 70], cardY: 50, phone: [52, 70.5], side: "left" },
+  { name: "Capacitor", note: "We test it against its rating and look for swelling.", at: [57.4, 74], cardY: 65, phone: [61, 73.5], side: "right" },
+  { name: "Refrigerant lines", note: "We check insulation, kinks and signs of a leak.", at: [38, 72], cardY: 80, phone: [25, 75], side: "right" },
 ] as const;
 
 // Frame sequences. Drop frame-0001.webp … frame-NNNN.webp into the folder and set `count`.
@@ -119,7 +119,7 @@ export const parts = [
 export const heroHold = 0.45;
 export const frames = {
   hero: { dir: "/media/hero", phoneDir: "/media/hero-phone", count: 212 }, // outdoor install (Gemini) -> push into the wall -> room pulls back and cools (Gemini, reversed)
-  unit: { dir: "/media/unit", phoneDir: "/media/unit-phone", count: 96 }, // Flow U1 v2 (S3 -> E1), frames 1-96: comes apart by ~74, then holds. Phone = same frames on a tall black canvas.
+  unit: { dir: "/media/unit", phoneDir: "/media/unit-phone", count: 96 }, // Flow U1y (yard S3y -> E1y), 0-5 s as 96 frames. Phone = the unit's column of the same clip on a tall canvas.
 };
 
 export const stills = {
