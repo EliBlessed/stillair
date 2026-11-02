@@ -114,3 +114,13 @@ A two-page static-export Next.js 16.4.2 marketing demo website for **Stillair**,
   - **Zero console errors**: `0` console errors, `0` uncaught exceptions, and `0` failed network requests across `/` and `/commercial`.
 
 
+
+## Claude fixes on top of round 2 (2026-11-02)
+- Phone speed (Lighthouse 13.5, home): 76 → 92–96 (median 94); commercial 89 → 96–97; desktop 99.
+  - gsap and Lenis load after hydration (dynamic import), not in the first HTML.
+  - Heat shimmer starts on the first scroll: a filtered h1 counted as a late repaint (LCP ~3.4 s).
+  - Only the first hero still is fetched eagerly; others are `loading="lazy"` (React preloads every eager img).
+  - 800px phone copies: `hero-hot-800.webp`, `commercial-rooftop-800.webp` (via srcSet). Keep a `-800` copy beside the first hero still.
+  - Geist Mono isn't preloaded (numbers swap in).
+  - Commercial first screen uses a CSS-only entrance (`.rise`) instead of the JS reveal, so it paints before JavaScript.
+- Customer tests: `pnpm build && pnpm test:e2e` (`tests/e2e/site.spec.ts`, 14 checks × desktop, laptop, tablet, phone, iPhone). `tests/serve.mjs` serves out/ with clean URLs like Cloudflare (`pnpm preview`).

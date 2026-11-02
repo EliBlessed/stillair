@@ -26,6 +26,12 @@ export function Hero() {
       return () => cancelAnimationFrame(id);
     }
 
+    // Shimmer starts on the first scroll, not on load: a filtered h1 counts as a late repaint and
+    // pushed phone LCP from ~0.9s to ~3.4s.
+    let armed = false;
+    const arm = () => { armed = true; sync(); };
+    addEventListener("scroll", arm, { once: true, passive: true });
+
     const sync = () => {
       const raw = scene.style.getPropertyValue("--p");
       const p = raw ? parseFloat(raw) : 0;
@@ -39,7 +45,7 @@ export function Hero() {
           ? 1.2 + ((t - temps.mid) / (temps.hot - temps.mid)) * 2.3
           : Math.max(0, ((t - temps.cool) / (temps.mid - temps.cool)) * 1.0);
 
-      if (dispRef.current && turbRef.current && h1Ref.current) {
+      if (armed && dispRef.current && turbRef.current && h1Ref.current) {
         if (strength <= 0.05) {
           dispRef.current.setAttribute("scale", "0");
           h1Ref.current.style.filter = "none";
@@ -54,7 +60,7 @@ export function Hero() {
     sync();
     const mo = new MutationObserver(sync);
     mo.observe(scene, { attributes: true, attributeFilter: ["style"] });
-    return () => mo.disconnect();
+    return () => { mo.disconnect(); removeEventListener("scroll", arm); };
   }, []);
 
   const stage = heroStages[stageIdx];

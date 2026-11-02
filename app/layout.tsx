@@ -7,7 +7,7 @@ import { SmoothScroll } from "@/components/smooth-scroll";
 import { site } from "@/lib/site-data";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], preload: false }); // numbers only: swaps in, keeps ~23 KB off first paint
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://stillair.example"), // placeholder domain: swap on launch

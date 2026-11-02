@@ -24,15 +24,15 @@ export default function Commercial() {
       <section className="pt-28 pb-4 md:pt-36">
         <div className="wrap grid items-end gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           <div>
-            <h1 className="h1" data-reveal>{commercial.headline}</h1>
-            <p className="lead mt-6 !text-ink/80" data-reveal="1">{commercial.who}</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row" data-reveal="2">
+            <h1 className="h1 rise">{commercial.headline}</h1>
+            <p className="lead rise mt-6 !text-ink/80 [animation-delay:70ms]">{commercial.who}</p>
+            <div className="rise mt-8 flex flex-col gap-3 [animation-delay:140ms] sm:flex-row">
               <a href="#survey" className="btn btn-ice">Request a site survey</a>
               <a href={site.phoneHref} className="btn">Call <span className="num">{site.phone}</span></a>
             </div>
           </div>
-          <div className="frame aspect-[4/3]" data-reveal="1">
-            <Img src="/media/commercial-rooftop.webp" alt="Rooftop air-conditioning units on a commercial building" width={1376} height={768} fetchPriority="high" />
+          <div className="frame rise aspect-[4/3] [animation-delay:70ms]">
+            <Img src="/media/commercial-rooftop.webp" alt="Rooftop air-conditioning units on a commercial building" width={1376} height={768} srcSet="/media/commercial-rooftop-800.webp 800w, /media/commercial-rooftop.webp 1376w" sizes="(min-width: 1024px) 50vw, 100vw" fetchPriority="high" />
           </div>
         </div>
       </section>
