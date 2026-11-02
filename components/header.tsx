@@ -16,13 +16,13 @@ export function Header() {
 
   return (
     <header className="fixed inset-x-3 top-3 z-50 mx-auto max-w-[1180px]">
-      <div className="flex items-center justify-between gap-3 rounded-full border border-line bg-base/70 py-2 pr-2 pl-5 backdrop-blur-xl">
+      <div className="glass flex items-center justify-between gap-3 rounded-full py-2 pr-2 pl-5">
         <Link href="/" prefetch={false} className="text-xl font-semibold tracking-[-0.03em]" onClick={() => setOpen(false)}>
           {site.brand}
         </Link>
         <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
           {nav.map((l) => (
-            <Link key={l.label} href={l.href} prefetch={false} className="rounded-full px-4 py-2 text-[0.95rem] text-muted transition-colors hover:text-ink">
+            <Link key={l.label} href={l.href} prefetch={false} className="rounded-full px-4 py-2 text-[0.95rem] text-ink/80 transition-colors hover:bg-white/10 hover:text-ink">
               {l.label}
             </Link>
           ))}
@@ -50,7 +50,7 @@ export function Header() {
       <div
         id="mobile-menu"
         hidden={!open}
-        className="mt-2 rounded-3xl border border-line bg-base/90 p-3 backdrop-blur-xl md:hidden"
+        className="glass glass-solid mt-2 rounded-3xl p-3 md:hidden"
       >
         <nav aria-label="Mobile" className="flex flex-col">
           {nav.map((l) => (

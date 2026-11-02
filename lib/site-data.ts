@@ -122,10 +122,10 @@ export const heroStages = [
   { temp: 72, text: "Cool. Finally." },
 ];
 
-// Until /media/room-hot.webp and /media/room-cool.webp exist, use the hero stills.
+// Matched hot/cool pair of the same room (Flow stills S1 and S2, approved 2026-11-02).
 export const roomCompare = {
-  hot: "/media/hero-hot.webp",
-  cool: "/media/hero-cool.webp",
+  hot: "/media/room-hot.webp",
+  cool: "/media/room-cool.webp",
   caption: "Drag to cool it down.",
 };
 
