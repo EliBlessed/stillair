@@ -21,11 +21,11 @@ export function UnitScene() {
             <BookLink need="Tune-up" className="btn">Book a tune-up</BookLink>
           </div>
         </div>
-        <ol className="flex flex-col gap-2.5 md:gap-3">
+        <ol className="flex flex-wrap gap-2 md:flex-col md:gap-3">
           {parts.map((p, i) => (
-            <li key={p.name} className="part rounded-2xl border border-line bg-base/70 px-5 py-3.5 backdrop-blur-md" style={{ "--i": i } as CSSProperties}>
+            <li key={p.name} className="part rounded-2xl border border-line bg-base/70 px-4 py-2 backdrop-blur-md md:px-5 md:py-3.5" style={{ "--i": i } as CSSProperties}>
               <p className="font-medium">{p.name}</p>
-              <p className="text-[0.95rem] text-muted">{p.note}</p>
+              <p className="hidden text-[0.95rem] text-muted md:block">{p.note}</p>{/* phones: names only, so the unit stays visible */}
             </li>
           ))}
         </ol>

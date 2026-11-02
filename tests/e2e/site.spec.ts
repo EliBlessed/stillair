@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { money, prices, repairSymptoms } from "../../lib/site-data";
+import { frames, money, parts, prices, repairSymptoms } from "../../lib/site-data";
 
 // What a customer does on the site, at every screen size. Run after `pnpm build`.
 
@@ -50,6 +50,19 @@ test("hero says AC and its buttons work above the film layers", async ({ page })
   const box = (await call.boundingBox())!;
   const hit = await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest("a")?.getAttribute("href"), [box.x + box.width / 2, box.y + box.height / 2]);
   expect(hit).toMatch(/^tel:/);
+});
+
+test("every part, checked: the unit comes apart with scroll and all five parts are named", async ({ page, request }) => {
+  const { dir, phoneDir, count } = frames.unit;
+  for (const d of [dir, phoneDir]) {
+    for (const n of [1, count]) expect((await request.get(`${d}/frame-${String(n).padStart(4, "0")}.webp`)).ok()).toBe(true);
+  }
+  await page.goto("/");
+  const scene = page.locator("section[aria-label^='An outdoor air-conditioning unit']");
+  await scene.scrollIntoViewIfNeeded();
+  await page.mouse.wheel(0, 2000);
+  await page.waitForTimeout(1200);
+  for (const p of parts) await expect(scene.getByText(p.name, { exact: true })).toBeVisible();
 });
 
 test("symptom cards open one at a time", async ({ page }) => {
