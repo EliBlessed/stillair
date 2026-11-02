@@ -65,6 +65,23 @@ test("every part, checked: the unit comes apart with scroll and all five parts a
   for (const p of parts) await expect(scene.getByText(p.name, { exact: true })).toBeVisible();
 });
 
+test("moving between pages keeps working after scrolling the films", async ({ page }) => {
+  const errors = errorsOn(page);
+  await page.goto("/");
+  await page.mouse.wheel(0, 600);
+  await page.waitForTimeout(800);
+  await page.goto("/"); // fresh top, then use the site's own links
+  await page.mouse.wheel(0, 300);
+  await page.waitForTimeout(800);
+  const menu = page.getByRole("button", { name: /menu/i });
+  if (await menu.isVisible()) await menu.click();
+  await page.getByRole("link", { name: "Commercial", exact: true }).first().click();
+  await expect(page.locator("h1")).toHaveText("Built for the whole building.");
+  await page.goBack();
+  await expect(page.locator("h1")).toHaveText("Cool. Finally.");
+  expect(errors).toEqual([]);
+});
+
 test("symptom cards open one at a time", async ({ page }) => {
   await page.goto("/");
   const cards = page.locator("#services button[aria-expanded]");
