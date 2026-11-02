@@ -130,3 +130,8 @@ A two-page static-export Next.js 16.4.2 marketing demo website for **Stillair**,
 - `heroHold = 0.45` in `lib/site-data.ts`: the readout stays at 91° while the outdoor part plays, then counts down to 72°. CSS gets it as `--hold` and works out the cooling progress `--c`.
 - Phone uses a 576x720 centre crop of the same frames. Dedicated 9:16 clips would frame the room better later.
 - Checked: lint, types, 56/56 customer tests (desktop, laptop, tablet, phone), phone Lighthouse 94–98 with a gzip server.
+
+## Glass header, slider hint, invisible-text fix (Claude, 2026-11-02)
+- Header and phone menu use a CSS-only liquid glass (`.glass` in globals.css). Liquid Glass JS was not used: the Tool Library verdict says plain CSS for real sites, and the JS library screenshots the page, which misses the hero film.
+- "Feel the difference" now uses the approved matched pair (Flow S1/S2 as room-hot/room-cool.webp). The handle slides right and back once when the slider comes into view, so visitors see it drags (not with reduced motion, not after a touch).
+- Bug: `--color-base` in `@theme` makes Tailwind's `text-base` set the text COLOUR to the page background as well as the font size. Unselected tabs and the footer headings were near invisible. All `text-base` uses are now `text-[1rem]`. Don't use `text-base` in this project.

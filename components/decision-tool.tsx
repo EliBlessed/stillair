@@ -116,7 +116,7 @@ export function DecisionTool() {
         <div className="card mt-10 p-5 md:mt-14 md:p-10" data-reveal="2">
           <div role="tablist" aria-label="Repair, replace or install" className="mb-8 flex gap-1.5 sm:gap-2" onKeyDown={onKey}>
             {tabs.map((t, i) => (
-              <button key={t} id={`tab-${i}`} role="tab" type="button" className="chip flex-1 whitespace-nowrap px-3 text-sm sm:flex-none sm:px-8 sm:text-base" aria-selected={tab === i} aria-controls="tool-panel" tabIndex={tab === i ? 0 : -1} onClick={() => setTab(i)}>{t}</button>
+              <button key={t} id={`tab-${i}`} role="tab" type="button" className="chip flex-1 whitespace-nowrap px-3 text-sm sm:flex-none sm:px-8 sm:text-[1rem]" aria-selected={tab === i} aria-controls="tool-panel" tabIndex={tab === i ? 0 : -1} onClick={() => setTab(i)}>{t}</button>
             ))}
           </div>
           <div id="tool-panel" role="tabpanel" aria-labelledby={`tab-${tab}`}>

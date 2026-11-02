@@ -1,12 +1,40 @@
 "use client";
-import { useRef, useState, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { roomCompare, temps } from "@/lib/site-data";
 import { Img } from "./img";
 
 export function FeelDifference() {
   const [pct, setPct] = useState(0); // starts on the hot side (0% cool revealed = 91°)
   const [dragging, setDragging] = useState(false);
+  const [hinting, setHinting] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
+  const touched = useRef(false);
+
+  // The first time the slider is well into view, the handle slides a little way right and back,
+  // so visitors see it can be dragged. Skipped with reduced motion or once someone has touched it.
+  useEffect(() => {
+    const box = boxRef.current;
+    if (!box || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timers: number[] = [];
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        io.disconnect();
+        timers.push(window.setTimeout(() => {
+          if (touched.current) return;
+          setHinting(true);
+          setPct(35);
+          timers.push(window.setTimeout(() => {
+            if (!touched.current) setPct(0);
+            timers.push(window.setTimeout(() => setHinting(false), 700));
+          }, 900));
+        }, 400));
+      },
+      { threshold: 0.6 },
+    );
+    io.observe(box);
+    return () => { io.disconnect(); timers.forEach(clearTimeout); };
+  }, []);
 
   const temp = Math.round(temps.hot - ((temps.hot - temps.cool) * pct) / 100);
 
@@ -17,6 +45,8 @@ export function FeelDifference() {
   };
 
   const onDown = (e: PointerEvent<HTMLInputElement>) => {
+    touched.current = true;
+    setHinting(false);
     setDragging(true);
     e.currentTarget.setPointerCapture(e.pointerId);
     setFromX(e.clientX);
@@ -27,7 +57,8 @@ export function FeelDifference() {
     setFromX(e.clientX);
   };
 
-  const ease = dragging ? "none" : "clip-path 120ms var(--ease-out), left 120ms var(--ease-out)";
+  const t = hinting ? "700ms var(--ease-in-out)" : "120ms var(--ease-out)";
+  const ease = dragging ? "none" : `clip-path ${t}, left ${t}`;
 
   return (
     <section id="feel" className="section scroll-mt-20 md:min-h-[80svh]">
@@ -79,12 +110,15 @@ export function FeelDifference() {
             value={pct}
             aria-label="Drag to cool it down"
             aria-valuetext={`${temp}°F`}
-            onChange={(e) => setPct(+e.target.value)}
+            onChange={(e) => { touched.current = true; setHinting(false); setPct(+e.target.value); }}
             onPointerDown={onDown}
             onPointerMove={onMove}
             onPointerUp={() => setDragging(false)}
             onPointerCancel={() => setDragging(false)}
             className="peer absolute inset-0 z-20 m-0 h-full w-full cursor-ew-resize opacity-0"
+            // Inline height: the global input[type="range"] rule (2rem) is unlayered and beats h-full,
+            // which left only a thin strip at the top of the picture draggable.
+            style={{ height: "100%", touchAction: "pan-y" }}
           />
 
           {/* Wipe vertical line */}
@@ -101,7 +135,7 @@ export function FeelDifference() {
             style={{ left: `clamp(3.25rem, ${pct}%, calc(100% - 3.25rem))`, transition: ease }}
           >
             <span className="text-xs text-muted">‹</span>
-            <span className="num text-base font-semibold text-ice">{temp}°F</span>
+            <span className="num text-[1rem] font-semibold text-ice">{temp}°F</span>
             <span className="text-xs text-muted">›</span>
           </div>
         </div>

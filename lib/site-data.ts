@@ -67,11 +67,11 @@ export const plans = [
 ];
 
 export const services = [
-  { name: "Repair", note: "Diagnose the fault, quote it in writing, fix it." },
-  { name: "Replacement", note: "Honest advice on when a repair stops making sense." },
-  { name: "Installation", note: "Mini-split and central (ducted) systems, sized properly." },
-  { name: "Tune-ups", note: "Catch small problems before a hot week finds them." },
-  { name: "Comfort Plan", note: "Two tune-ups a year and priority visits." },
+  { name: "Repair", href: "/#tools", note: "Diagnose the fault, quote it in writing, fix it." },
+  { name: "Replacement", href: "/#tools", note: "Honest advice on when a repair stops making sense." },
+  { name: "Installation", href: "/#tools", note: "Mini-split and central (ducted) systems, sized properly." },
+  { name: "Tune-ups", href: "/#plans", note: "Catch small problems before a hot week finds them." },
+  { name: "Comfort Plan", href: "/#plans", note: "Two tune-ups a year and priority visits." },
 ];
 
 export const symptoms = [
@@ -122,10 +122,10 @@ export const heroStages = [
   { temp: 72, text: "Cool. Finally." },
 ];
 
-// Until /media/room-hot.webp and /media/room-cool.webp exist, use the hero stills.
+// Matched hot/cool pair of the same room (Flow stills S1 and S2, approved 2026-11-02).
 export const roomCompare = {
-  hot: "/media/hero-hot.webp",
-  cool: "/media/hero-cool.webp",
+  hot: "/media/room-hot.webp",
+  cool: "/media/room-cool.webp",
   caption: "Drag to cool it down.",
 };
 
