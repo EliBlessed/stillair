@@ -60,9 +60,13 @@ test("every part, checked: the unit comes apart with scroll and all five parts a
   await page.goto("/");
   const scene = page.locator("section[aria-label^='An outdoor air-conditioning unit']");
   await scene.scrollIntoViewIfNeeded();
-  await page.mouse.wheel(0, 2000);
+  // scroll to the end of the pinned scene (220vh)
+  await scene.evaluate((el) => scrollTo(0, el.getBoundingClientRect().top + scrollY + innerHeight * 2.2));
   await page.waitForTimeout(1200);
-  for (const p of parts) await expect(scene.getByText(p.name, { exact: true })).toBeVisible();
+  // labels are pinned on the parts and fade in once it has come apart
+  for (const p of parts) await expect(scene.getByText(p.name, { exact: true }).filter({ visible: true })).toHaveCount(1);
+  const shown = await scene.locator("li.pin").evaluateAll((els) => els.map((e) => getComputedStyle(e).opacity));
+  expect(shown).toEqual(parts.map(() => "1"));
 });
 
 test("moving between pages keeps working after scrolling the films", async ({ page }) => {

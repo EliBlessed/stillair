@@ -120,10 +120,11 @@ select.field { appearance: none; background-image: linear-gradient(45deg, transp
 .readout { counter-reset: t round(calc(var(--hot) - (var(--hot) - var(--cool)) * var(--c)), 1); color: color-mix(in oklab, var(--color-heat) calc((1 - var(--c)) * 100%), var(--color-ice)); }
 .readout::before { content: counter(t); }
 .readout::after { content: "°F"; font-size: 0.4em; vertical-align: top; margin-left: 0.1em; }
-.part {
-  --k: clamp(0, calc((var(--p) - (0.12 + var(--i) * 0.14)) * 7), 1);
-  opacity: var(--k); transform: translateX(calc((1 - var(--k)) * 3rem));
-}
+/* Exploded unit: a box the size of the frame as object-cover draws it (desktop 1280x800, phone 576x1248). */
+.unit-box { --ar: calc(576 / 1248); width: max(100cqw, 100cqh * var(--ar)); height: max(100cqh, 100cqw / var(--ar)); }
+@media (min-width: 768px) { .unit-box { --ar: calc(1280 / 800); } }
+/* Pinned labels appear one by one once the unit has come apart (frame ~74 of 96 = --p 0.77). */
+.pin { opacity: clamp(0, calc((var(--p) - (0.78 + var(--i) * 0.035)) * 25), 1); }
 
 /* Accordion: grid rows 0fr to 1fr, no JS measuring */
 .acc { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 260ms var(--ease-out); }

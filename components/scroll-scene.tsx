@@ -29,7 +29,15 @@ export function ScrollScene({ frames, stills, grads, alt, scroll = 150, priority
 
   useEffect(() => {
     const el = root.current!;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      // No scrubbing: show the end state (cool room, unit apart), which is what --p: 1 describes.
+      const img = first.current;
+      if (hasFrames && img) {
+        img.parentElement?.querySelector("source")?.setAttribute("srcset", name(frames.phoneDir, frames.count));
+        img.src = name(frames.dir, frames.count);
+      }
+      return;
+    }
 
     // shortcut: breakpoint is read once; rotating across 768px needs a reload to swap frame sets.
     const dir = matchMedia("(max-width: 767px)").matches ? frames.phoneDir : frames.dir;
