@@ -1,11 +1,11 @@
 "use client";
 import { useState, type KeyboardEvent, type ReactNode } from "react";
-import { central, installChoices, mini, prices, repairSymptoms, rule, site, type Range } from "@/lib/site-data";
+import { central, prices, repairSymptoms, rule, site, type Range } from "@/lib/site-data";
 import { Money } from "./roll";
 import { Img } from "./img";
 import { BookLink } from "./book-link";
 
-const tabs = ["Repair", "Replace", "Install"] as const;
+const tabs = ["Repair", "Replace"] as const;
 
 function Row({ label, note, range }: { label: string; note?: string; range: Range }) {
   return (
@@ -39,9 +39,9 @@ function Repair() {
         {repairSymptoms.map((x) => <button key={x.id} type="button" className="chip" aria-pressed={x.id === id} onClick={() => setId(x.id)}>{x.label}</button>)}
       </div>
       <Out need="Repair" message={`Symptom: ${s.label}.`} cta="Book a diagnostic visit">
-        <div className="grid gap-6 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-10">
+        <div className="grid gap-6 md:gap-8 lg:grid-cols-2 lg:gap-10">
           {/* the likely part, so the answer is a picture first and prices second */}
-          <div className="frame aspect-[4/3] self-start">
+          <div className="frame aspect-[16/10] self-start">
             {repairSymptoms.map((x) => (
               <Img key={x.id} src={x.photo} alt={x.id === id ? `Likely part: ${x.likely}` : ""} aria-hidden={x.id !== id} width={560} height={420} loading="lazy" className="absolute inset-0" style={{ opacity: x.id === id ? 1 : 0, transition: "opacity 300ms var(--ease-out)" }} />
             ))}
@@ -65,13 +65,16 @@ function Replace() {
   const replace = score > rule.limit;
   return (
     <>
+      <p className="mb-8 max-w-2xl text-lg">
+        Got a repair quote on an older unit? Set its age and the quote. Contractors use a simple test: age × quote. Over ${rule.limit.toLocaleString("en-US")}, a new unit usually makes more sense than the repair.
+      </p>
       <div className="grid gap-8 md:grid-cols-2">
         <label className="block">
-          <span className="flex justify-between"><span>Unit age</span><span className="num">{age} {age === 1 ? "year" : "years"}</span></span>
+          <span className="flex justify-between gap-4"><span>How old is your unit?</span><span className="num shrink-0">{age} {age === 1 ? "year" : "years"}</span></span>
           <input type="range" min={rule.ageMin} max={rule.ageMax} value={age} onChange={(e) => setAge(+e.target.value)} />
         </label>
         <label className="block">
-          <span className="flex justify-between"><span>Repair quote</span><span className="num">${quote.toLocaleString("en-US")}</span></span>
+          <span className="flex justify-between gap-4"><span>What were you quoted to repair it?</span><span className="num shrink-0">${quote.toLocaleString("en-US")}</span></span>
           <input type="range" min={rule.quoteMin} max={rule.quoteMax} step={rule.quoteStep} value={quote} onChange={(e) => setQuote(+e.target.value)} />
         </label>
       </div>
@@ -80,29 +83,10 @@ function Replace() {
           {replace ? "Replacing is likely smarter" : "Repair it"}
         </p>
         <p className="small mt-3">
-          The ${rule.limit.toLocaleString("en-US")} rule, a common contractor rule of thumb: <span className="num">{age} × ${quote.toLocaleString("en-US")} = ${score.toLocaleString("en-US")}</span>, which is {replace ? "over" : "not over"} <span className="num">${rule.limit.toLocaleString("en-US")}</span>.
+          The ${rule.limit.toLocaleString("en-US")} rule, a common contractor rule of thumb: <span className="num shrink-0">{age} × ${quote.toLocaleString("en-US")} = ${score.toLocaleString("en-US")}</span>, which is {replace ? "over" : "not over"} <span className="num">${rule.limit.toLocaleString("en-US")}</span>.
         </p>
         <h3 className="mt-8 mb-1 font-medium">If you replace: central (ducted), whole home</h3>
         {central.map((c) => <Row key={c.id} label={c.size} note={c.note} range={c.price} />)}
-      </Out>
-    </>
-  );
-}
-
-function Install() {
-  const [id, setId] = useState(installChoices[0].id);
-  const c = installChoices.find((x) => x.id === id)!;
-  return (
-    <>
-      <p className="mb-4 text-muted" id="inst-q">What are you doing?</p>
-      <div role="group" aria-labelledby="inst-q" className="flex flex-wrap gap-2">
-        {installChoices.map((x) => <button key={x.id} type="button" className="chip" aria-pressed={x.id === id} onClick={() => setId(x.id)}>{x.label}</button>)}
-      </div>
-      <Out need="Install" message={`Install: ${c.label}.`}>
-        <p className="mb-2 text-muted">{c.why}</p>
-        {c.kind === "mini"
-          ? mini.map((m) => <Row key={m.id} label={`Mini-split, ${m.btu}`} note={`${m.room}, ${m.sqft} (typical)`} range={m.price} />)
-          : central.map((m) => <Row key={m.id} label={`Central (ducted), ${m.size}`} note={m.note} range={m.price} />)}
       </Out>
     </>
   );
@@ -122,18 +106,18 @@ export function DecisionTool() {
       <div className="wrap">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-10">
           <h2 className="h2 max-w-[14ch]" data-reveal>
-            Repair, replace or <span className="text-ice">install?</span>
+            Repair or <span className="text-ice">replace?</span>
           </h2>
-          <p className="lead md:max-w-sm" data-reveal="1">Tell us what it is doing. You get the likely cause, typical South Florida ranges and a clear next step.</p>
+          <p className="lead md:max-w-sm" data-reveal="1">Tell us what it is doing and see the likely cause and typical South Florida prices. Older unit? The Replace tab tells you if fixing it is worth it.</p>
         </div>
         <div className="card mt-10 p-5 md:mt-14 md:p-10" data-reveal="2">
-          <div role="tablist" aria-label="Repair, replace or install" className="mb-8 flex gap-1.5 sm:gap-2" onKeyDown={onKey}>
+          <div role="tablist" aria-label="Repair or replace" className="mb-8 flex gap-1.5 sm:gap-2" onKeyDown={onKey}>
             {tabs.map((t, i) => (
               <button key={t} id={`tab-${i}`} role="tab" type="button" className="chip flex-1 whitespace-nowrap px-3 text-sm sm:flex-none sm:px-8 sm:text-[1rem]" aria-selected={tab === i} aria-controls="tool-panel" tabIndex={tab === i ? 0 : -1} onClick={() => setTab(i)}>{t}</button>
             ))}
           </div>
           <div id="tool-panel" role="tabpanel" aria-labelledby={`tab-${tab}`}>
-            {tab === 0 ? <Repair /> : tab === 1 ? <Replace /> : <Install />}
+            {tab === 0 ? <Repair /> : <Replace />}
           </div>
         </div>
       </div>

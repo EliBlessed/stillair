@@ -46,37 +46,6 @@ export const prices = {
   comfortPlanPerYear: 219,
 };
 
-export const plans = [
-  {
-    id: "tune-up",
-    name: "Tune-up",
-    need: "Tune-up",
-    price: money(prices.tuneUp),
-    unit: "typical range",
-    points: ["A full check of a running system", "Cleaning and a written report"],
-    cta: "Book a tune-up",
-  },
-  {
-    id: "comfort",
-    name: "Comfort Plan",
-    need: "Comfort Plan",
-    price: `$${prices.comfortPlanPerYear}`,
-    unit: "/ year",
-    points: ["2 tune-ups a year", "Priority visits", "15% off repairs"],
-    cta: "Join the Comfort Plan",
-    featured: true,
-  },
-  {
-    id: "repair",
-    name: "Repair visit",
-    need: "Repair",
-    price: money(prices.diagnostic),
-    unit: "diagnostic, typical range",
-    points: ["Credited to the repair if you go ahead", "Written quote before any work"],
-    cta: "Book a diagnostic visit",
-  },
-];
-
 export const services = [
   { name: "Repair", href: "/#tools", note: "Diagnose the fault, quote it in writing, fix it." },
   { name: "Replacement", href: "/#tools", note: "Honest advice on when a repair stops making sense." },
@@ -199,11 +168,6 @@ export const central = [
 export const centralRoom = { chip: "Whole home", photo: "/media/rooms/room-central.webp", room: "Central (ducted), whole home", sqft: "sized by a load calculation" };
 
 // Install tab
-export const installChoices = [
-  { id: "new", label: "New room or addition", kind: "mini" as const, why: "No ducts needed, so one mini-split can cool a single new space." },
-  { id: "none", label: "Home with no AC", kind: "central" as const, why: "A central (ducted) system cools the whole home from one unit." },
-  { id: "ductless", label: "Upgrading to ductless", kind: "mini" as const, why: "A mini-split replaces a window unit or adds a zone, room by room." },
-];
 
 export const needs = ["Repair", "Replace", "Install", "Tune-up", "Comfort Plan"];
 

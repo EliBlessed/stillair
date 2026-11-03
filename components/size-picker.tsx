@@ -21,9 +21,10 @@ export function SizePicker() {
         <h2 className="h2" data-reveal>
           What <span className="text-ice">size</span> do I need?
         </h2>
+      </div>
         {/* The room fills the section; the picker sits in a glass card in its corner (below it on phones). */}
         <div className="relative mt-8 md:mt-12" data-reveal="1">
-          <div className="frame aspect-[4/3] md:aspect-[16/9]">
+          <div className="relative aspect-[4/3] w-full overflow-hidden bg-raised md:aspect-[16/9] lg:max-h-[92svh]">
             {options.map((x, n) => (
               <Img
                 key={x.id}
@@ -33,12 +34,12 @@ export function SizePicker() {
                 width={1376}
                 height={768}
                 loading="lazy"
-                className="absolute inset-0"
+                className="absolute inset-0 size-full object-cover"
                 style={{ opacity: n === i ? 1 : 0, transition: "opacity 400ms var(--ease-out)" }}
               />
             ))}
           </div>
-          <div className="mt-4 rounded-[20px] border border-line bg-base/75 p-5 backdrop-blur-xl lg:absolute lg:right-5 lg:bottom-5 lg:mt-0 lg:w-[24rem] lg:p-6">
+          <div className="mx-5 mt-4 rounded-[20px] border border-line bg-base/75 p-5 backdrop-blur-xl lg:absolute lg:right-8 lg:bottom-8 lg:mx-0 lg:mt-0 lg:w-[24rem] lg:p-6">
             <div role="group" aria-label="Room size" className="flex flex-wrap gap-2">
               {options.map((x, n) => <button key={x.id} type="button" className="chip num" aria-pressed={n === i} onClick={() => setI(n)}>{x.chip}</button>)}
             </div>
@@ -55,7 +56,6 @@ export function SizePicker() {
             </div>
           </div>
         </div>
-      </div>
     </section>
   );
 }
