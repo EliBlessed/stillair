@@ -21,10 +21,9 @@ export const site = {
 };
 
 export const nav = [
-  { label: "Services", href: "/#tools" },
-  { label: "Tools", href: "/#tools" },
-  { label: "Plans", href: "/#plans" },
-  { label: "Commercial", href: "/commercial" },
+  { label: "Repair or replace", href: "/#tools" },
+  { label: "Sizes", href: "/#size" },
+  { label: "Comfort Plan", href: "/#plans" },
 ];
 
 export const prices = {
@@ -167,28 +166,6 @@ export const central = [
 
 export const centralRoom = { chip: "Whole home", photo: "/media/rooms/room-central.webp", room: "Central (ducted), whole home", sqft: "sized by a load calculation" };
 
-// Install tab
 
 export const needs = ["Repair", "Replace", "Install", "Tune-up", "Comfort Plan"];
-
-export const steps = [
-  { title: "Call or book online", text: "Tell us what is going on. We find a visit that suits you." },
-  { title: "We diagnose and quote, in writing", text: "You see the cause and the price before any work starts." },
-  { title: "You approve, we fix", text: "Nothing happens until you say yes." },
-];
-
-// Commercial page
-export const commercial = {
-  headline: "Built for the whole building.",
-  who: "Offices, shops and restaurants: ducted systems, rooftop units and the airflow between them.",
-  cards: [
-    { name: "Ducted system installs", text: "New ducted systems planned around how your building is used." },
-    { name: "Duct repair and sealing", text: "Find and seal leaks so the air you pay to cool reaches the room." },
-    { name: "Rooftop units", text: "Service, repair and replacement of rooftop packaged units." },
-    { name: "Vents and airflow balancing", text: "Even out hot and cold spots across floors and rooms." },
-  ],
-  contract: { title: "Maintenance contracts", text: "Scheduled visits on your calendar, one point of contact.", price: "Quoted per site" },
-  buildingTypes: ["Office", "Shop", "Restaurant", "Other"],
-};
-
 

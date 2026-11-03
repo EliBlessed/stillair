@@ -5,7 +5,6 @@ import { DecisionTool } from "@/components/decision-tool";
 import { SizePicker } from "@/components/size-picker";
 import { StatRow } from "@/components/stat-row";
 import { Plans } from "@/components/plans";
-import { HowItWorks } from "@/components/how-it-works";
 import { Booking } from "@/components/booking";
 
 export const metadata = {
@@ -23,7 +22,6 @@ export default function Home() {
       <SizePicker />
       <StatRow />
       <Plans />
-      <HowItWorks />
       <Booking />
     </>
   );

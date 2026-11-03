@@ -102,7 +102,7 @@ export function DecisionTool() {
     document.getElementById(`tab-${n}`)?.focus();
   };
   return (
-    <section id="tools" className="section scroll-mt-20">
+    <section id="tools" className="section">
       <div className="wrap">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-10">
           <h2 className="h2 max-w-[14ch]" data-reveal>
