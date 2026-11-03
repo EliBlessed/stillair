@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
+import { site } from "@/lib/site-data";
 
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [""].map((p) => ({ url: `https://stillair.example${p}` }));
+  return [{ url: site.url }];
 }
 

@@ -11,6 +11,7 @@ export const site = {
   tagline: "Cool. Finally.",
   phone: "(305) 555-0142", // 555-01xx is reserved for fiction
   phoneHref: "tel:+13055550142",
+  url: "https://stillair.vercel.app", // the live address: canonical, share card, sitemap
   email: "hello@stillair.example",
   area: "Serving South Florida",
   demoLabel: "Demo concept · placeholder brand",

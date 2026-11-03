@@ -208,6 +208,16 @@ test("search basics: titles, descriptions, sitemap and robots", async ({ page, r
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /.{40,}/);
     await expect(page.locator('meta[property="og:image"]')).toHaveCount(1);
   }
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /^https:\/\/stillair\.vercel\.app\//); // share card works when the link is posted
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /^https:\/\/stillair\.vercel\.app/);
   expect((await request.get("/sitemap.xml")).ok()).toBe(true);
   expect(await (await request.get("/robots.txt")).text()).toContain("Sitemap");
+});
+
+test("security headers are sent (same as vercel.json) and the page runs under the CSP", async ({ request }) => {
+  const h = (await request.get("/")).headers();
+  expect(h["content-security-policy"]).toContain("frame-ancestors 'none'");
+  expect(h["x-content-type-options"]).toBe("nosniff");
+  expect(h["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+  expect(h["permissions-policy"]).toContain("camera=()");
 });
