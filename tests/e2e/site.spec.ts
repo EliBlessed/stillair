@@ -69,6 +69,24 @@ test("every part, checked: the unit comes apart with scroll and all five parts a
   expect(shown).toEqual(parts.map(() => "1"));
 });
 
+test("every part, checked: part cards clear the nav on short and wide screens", async ({ browser }) => {
+  for (const viewport of [{ width: 1280, height: 600 }, { width: 2560, height: 1080 }]) {
+    const page = await browser.newPage({ viewport });
+    await page.goto("/");
+    // scroll into the pinned scene, where the cards show
+    await page.locator(".unit-box").first().evaluate((e) => scrollTo(0, e.closest("section")!.getBoundingClientRect().top + scrollY + innerHeight * 2));
+    await page.waitForTimeout(800);
+    const nav = await page.locator("header").first().evaluate((e) => e.getBoundingClientRect().bottom);
+    const cards = await page.locator(".unit-box li > div").evaluateAll((es) => es.map((e) => e.getBoundingClientRect()).map((r) => [r.top, r.bottom]));
+    expect(cards).toHaveLength(5);
+    for (const [top, bottom] of cards) {
+      expect(top).toBeGreaterThan(nav + 8); // below the floating nav
+      expect(bottom).toBeLessThan(viewport.height); // still on screen
+    }
+    await page.close();
+  }
+});
+
 test("repair tool shows a picture of the likely part for every symptom", async ({ page }) => {
   await page.goto("/");
   const group = page.getByRole("group", { name: "What is it doing?" });
