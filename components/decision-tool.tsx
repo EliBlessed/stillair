@@ -41,7 +41,7 @@ function Repair() {
       <Out need="Repair" message={`Symptom: ${s.label}.`} cta="Book a diagnostic visit">
         <div className="grid gap-6 md:gap-8 lg:grid-cols-2 lg:gap-10">
           {/* the likely part, so the answer is a picture first and prices second */}
-          <div className="frame aspect-[16/10] self-start">
+          <div className="frame aspect-[16/10] lg:aspect-auto lg:min-h-80">
             {repairSymptoms.map((x) => (
               <Img key={x.id} src={x.photo} alt={x.id === id ? `Likely part: ${x.likely}` : ""} aria-hidden={x.id !== id} width={560} height={420} loading="lazy" className="absolute inset-0" style={{ opacity: x.id === id ? 1 : 0, transition: "opacity 300ms var(--ease-out)" }} />
             ))}
