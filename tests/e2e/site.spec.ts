@@ -190,6 +190,9 @@ test("booking form checks the fields, then says plainly that nothing was sent", 
   await page.selectOption("#book-need", "Repair");
   await submit.click();
   await expect(page.getByRole("status")).toContainText("no booking was made and nothing was sent");
+  const contact = page.getByRole("status").getByRole("link", { name: /Contact Elijah/ });
+  await expect(contact).toHaveAttribute("href", "https://www.linkedin.com/in/elijah-johnson-data-ai/");
+  await expect(contact).toHaveAttribute("rel", /noopener/);
 });
 
 test("reduced motion: hero rests cool, no heat shimmer", async ({ browser }) => {

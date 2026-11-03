@@ -80,7 +80,6 @@ export function Hero() {
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden style={{ background: "radial-gradient(110% 80% at 75% 100%, var(--color-heat), transparent 70%)", opacity: "calc((1 - var(--c)) * 0.38)" }} />
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-base/90 via-base/35 to-base/55 md:bg-gradient-to-r md:from-base/90 md:via-base/45 md:to-transparent" aria-hidden />
 
-      <p className="absolute right-5 bottom-3 z-10 rounded-full border border-line bg-base/60 px-3 py-1 text-xs text-muted backdrop-blur-md md:top-24 md:right-8 md:bottom-auto">{site.demoLabel}</p>
 
       <div ref={wrapRef} className="wrap relative flex flex-1 flex-col gap-6 pt-28 pb-12 md:justify-end md:gap-8 md:pt-32 md:pb-14">
         {/* Same order on every screen: readout and stage caption, then headline and line, then buttons.
