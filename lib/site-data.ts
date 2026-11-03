@@ -105,7 +105,7 @@ export const stats = [
 
 // Repair tab
 type Fix = { label: string; note?: string; range: Range };
-// photo: the likely part, cropped from the exploded-unit film (leak: the indoor unit from the hero film)
+// photo: a Flow still for each symptom (capacitor, fan, thermostat, indoor drip, clogged coil)
 export const repairSymptoms: { id: string; label: string; likely: string; photo: string; fixes: Fix[]; big?: Fix }[] = [
   {
     id: "warm", photo: "/media/parts/warm.webp", label: "Blowing warm air", likely: "A failed capacitor or a refrigerant leak. Less often, the compressor.",
