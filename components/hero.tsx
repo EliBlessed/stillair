@@ -66,7 +66,7 @@ export function Hero() {
   const stage = heroStages[stageIdx];
 
   return (
-    <ScrollScene frames={frames.hero} stills={stills.hero} grads={grads} alt="Cool. Finally. An air conditioner being installed, then a room cooling from 91 to 72 degrees" priority scroll={350} hold={heroHold}>
+    <ScrollScene frames={frames.hero} stills={stills.hero} grads={grads} alt="Cool. Finally. A drone shot drops from the Florida sun to a technician servicing an outdoor AC unit, dives through it and comes out into a room cooling from 91 to 72 degrees" priority scroll={350} hold={heroHold}>
       <svg className="pointer-events-none absolute size-0" aria-hidden>
         <defs>
           <filter id="hero-shimmer" x="-5%" y="-10%" width="110%" height="120%">
@@ -94,7 +94,8 @@ export function Hero() {
         </div>
 
         <div className="flex max-w-xl flex-col gap-5 md:gap-6">
-          <h1 ref={h1Ref} className="h1">{site.tagline}</h1>
+          {/* The headline lands as the camera comes out into the cool room (stays in the DOM for search and screen readers). */}
+          <h1 ref={h1Ref} className="h1" style={{ opacity: "clamp(0, calc((var(--c) - 0.55) * 4), 1)" }}>{site.tagline}</h1>
           <p className="lead !text-ink/85">Air conditioning repair, replacement and installation. {site.area}.</p>
         </div>
 
