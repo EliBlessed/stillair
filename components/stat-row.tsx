@@ -6,7 +6,7 @@ export function StatRow() {
   return (
     <section id="stats" className="section">
       <div className="wrap">
-        {/* Florida sun photo: a band on top on phones; behind the text on larger screens, darkened on the left so the copy reads. */}
+        {/* Florida sun photo: a band on top on phones (cropped from the bottom so the strip of sky stays out); behind the text on larger screens, darkened on the left so the copy reads. */}
         <div className="card relative overflow-hidden p-0">
           <Img
             src="/media/florida.webp"
@@ -14,7 +14,7 @@ export function StatRow() {
             width={1600}
             height={893}
             loading="lazy"
-            className="aspect-[16/9] w-full object-cover object-right md:absolute md:object-[100%_100%] md:inset-0 md:aspect-auto md:h-full"
+            className="aspect-[11/5] w-full object-cover object-[100%_100%] md:absolute md:inset-0 md:aspect-auto md:h-full"
           />
           <div aria-hidden className="absolute inset-0 hidden bg-gradient-to-r from-base via-base/80 to-base/0 md:block" />
           <div className="relative p-7 md:max-w-[60%] md:p-12">
