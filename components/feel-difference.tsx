@@ -61,7 +61,7 @@ export function FeelDifference() {
   const ease = dragging ? "none" : `clip-path ${t}, left ${t}`;
 
   return (
-    <section id="feel" className="section scroll-mt-20 md:min-h-[80svh]">
+    <section id="feel" className="section md:min-h-[80svh]">
       <div className="wrap">
         <div className="mb-8 flex flex-col gap-3 md:mb-10 md:flex-row md:items-end md:justify-between">
           <h2 className="h2" data-reveal>

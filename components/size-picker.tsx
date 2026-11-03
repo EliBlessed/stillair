@@ -16,7 +16,7 @@ export function SizePicker() {
   const [i, setI] = useState(0);
   const o = options[i];
   return (
-    <section id="size" className="section scroll-mt-20">
+    <section id="size" className="section">
       <div className="wrap">
         <h2 className="h2" data-reveal>
           What <span className="text-ice">size</span> do I need?

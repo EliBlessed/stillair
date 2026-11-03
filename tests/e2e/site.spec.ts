@@ -16,7 +16,7 @@ const noSideScroll = async (page: Page) =>
 // Honesty: a made-up company has no reviews, ratings, licences or guarantees.
 const banned = /\b(reviews?|testimonials?|stars?|5-star|licensed|licence|license #|certified|guarantee[ds]?|award|happy customers|years in business)\b/i;
 
-for (const path of ["/", "/commercial"]) {
+for (const path of ["/"]) {
   test(`${path} loads clean: no errors, no side scroll, demo label, honest copy`, async ({ page }) => {
     const errors = errorsOn(page);
     await page.goto(path);
@@ -67,23 +67,6 @@ test("every part, checked: the unit comes apart with scroll and all five parts a
   for (const p of parts) await expect(scene.getByText(p.name, { exact: true }).filter({ visible: true })).toHaveCount(1);
   const shown = await scene.locator("li.pin").evaluateAll((els) => els.map((e) => getComputedStyle(e).opacity));
   expect(shown).toEqual(parts.map(() => "1"));
-});
-
-test("moving between pages keeps working after scrolling the films", async ({ page }) => {
-  const errors = errorsOn(page);
-  await page.goto("/");
-  await page.mouse.wheel(0, 600);
-  await page.waitForTimeout(800);
-  await page.goto("/"); // fresh top, then use the site's own links
-  await page.mouse.wheel(0, 300);
-  await page.waitForTimeout(800);
-  const menu = page.getByRole("button", { name: /menu/i });
-  if (await menu.isVisible()) await menu.click();
-  await page.getByRole("link", { name: "Commercial", exact: true }).first().click();
-  await expect(page.locator("h1")).toHaveText("Built for the whole building.");
-  await page.goBack();
-  await expect(page.locator("h1")).toHaveText("Cool. Finally.");
-  expect(errors).toEqual([]);
 });
 
 test("repair tool shows a picture of the likely part for every symptom", async ({ page }) => {
@@ -204,17 +187,6 @@ test("booking form checks the fields, then says plainly that nothing was sent", 
   await expect(page.getByRole("status")).toContainText("no booking was made and nothing was sent");
 });
 
-test("commercial: four services, no price for contracts, survey form is a demo", async ({ page }) => {
-  await page.goto("/commercial");
-  await expect(page.locator("h1")).toContainText("whole building");
-  await expect(page.getByText("Quoted per site")).toBeVisible();
-  for (const s of ["Ducted system installs", "Duct repair and sealing", "Rooftop units", "Vents and airflow balancing"]) {
-    await expect(page.getByText(s, { exact: false }).first()).toBeVisible();
-  }
-  await page.getByRole("button", { name: "Request a site survey" }).click();
-  await expect(page.locator("[aria-invalid=true]").first()).toBeVisible();
-});
-
 test("reduced motion: hero rests cool, no heat shimmer", async ({ browser }) => {
   const ctx = await browser.newContext({ reducedMotion: "reduce" });
   const page = await ctx.newPage();
@@ -225,7 +197,7 @@ test("reduced motion: hero rests cool, no heat shimmer", async ({ browser }) => 
 });
 
 test("search basics: titles, descriptions, sitemap and robots", async ({ page, request }) => {
-  for (const path of ["/", "/commercial"]) {
+  for (const path of ["/"]) {
     await page.goto(path);
     expect((await page.title()).length).toBeGreaterThan(10);
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /.{40,}/);

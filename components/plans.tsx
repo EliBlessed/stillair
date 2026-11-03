@@ -5,7 +5,7 @@ const points = ["2 tune-ups a year", "Priority visits in a heatwave", "15% off r
 
 export function Plans() {
   return (
-    <section id="plans" className="section scroll-mt-20">
+    <section id="plans" className="section">
       <div className="wrap">
         <div className="card grid gap-8 border-ice p-7 md:p-12 lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-16" style={{ background: "#142130" }}>
           <div>

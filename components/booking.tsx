@@ -13,7 +13,7 @@ const fields: Field[] = [
 
 export function Booking() {
   return (
-    <section id="book" className="section scroll-mt-20 md:min-h-[80svh]">
+    <section id="book" className="section md:min-h-[80svh]">
       <div className="wrap grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
         <div>
           <h2 className="h2 mb-8" data-reveal>
