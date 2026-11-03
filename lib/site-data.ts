@@ -66,10 +66,11 @@ export const parts = [
 
 // Frame sequences. Drop frame-0001.webp … frame-NNNN.webp into the folder and set `count`.
 // count 0 = no frames yet: the scene shows the still placeholders instead.
-// The hero holds at 91° while the outdoor install plays (frames 1–98 of 212), then cools.
-export const heroHold = 0.45;
+// The hero holds at 91° while the drone shot drops to the technician and dives into the outdoor unit
+// (frames 1–136 of 245), then cools as the camera comes out of the indoor unit into the room.
+export const heroHold = 0.56;
 export const frames = {
-  hero: { dir: "/media/hero", phoneDir: "/media/hero-phone", count: 212 }, // outdoor install (Gemini) -> push into the wall -> room pulls back and cools (Gemini, reversed)
+  hero: { dir: "/media/hero", phoneDir: "/media/hero-phone", count: 245 }, // "Sun to cool": drone shot (Dola) -> code dive into the fan grille -> out of the indoor unit (Flow V1, reversed). Phone = centre 576px column.
   unit: { dir: "/media/unit", phoneDir: "/media/unit-phone", count: 96 }, // Flow U1y (yard S3y -> E1y), 0-5 s as 96 frames. Phone = the unit's column of the same clip on a tall canvas.
 };
 
