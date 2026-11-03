@@ -14,28 +14,28 @@ export function Footer() {
             <p className="mt-4 max-w-xs text-muted">{site.tagline} {site.area}.</p>
           </div>
           <div>
-            <p className="mb-3 text-[1rem] font-medium">Contact</p>
-            <ul className="space-y-2 text-muted">
-              <li><a href={site.phoneHref} className="num hover:text-ink">{site.phone}</a></li>
-              <li><a href={`mailto:${site.email}`} className="break-all hover:text-ink">{site.email}</a></li>
+            <p className="mb-1 text-[1rem] font-medium md:mb-3">Contact</p>
+            <ul className="text-muted md:space-y-2">
+              <li><a href={site.phoneHref} className="num inline-block py-2.5 hover:text-ink md:py-0">{site.phone}</a></li>
+              <li><a href={`mailto:${site.email}`} className="inline-block break-all py-2.5 hover:text-ink md:py-0">{site.email}</a></li>
             </ul>
           </div>
           <div>
-            <p className="mb-3 text-[1rem] font-medium">Pages</p>
-            <ul className="space-y-2 text-muted">
-              {nav.map((l) => <li key={l.label}><Link href={l.href} prefetch={false} className="hover:text-ink">{l.label}</Link></li>)}
+            <p className="mb-1 text-[1rem] font-medium md:mb-3">On this page</p>
+            <ul className="text-muted md:space-y-2">
+              {nav.map((l) => <li key={l.label}><Link href={l.href} prefetch={false} className="inline-block py-2.5 hover:text-ink md:py-0">{l.label}</Link></li>)}
             </ul>
           </div>
           <div>
-            <p className="mb-3 text-[1rem] font-medium">Services</p>
-            <ul className="space-y-2 text-muted">
-              {services.map((s) => <li key={s.name}><a href={s.href} className="hover:text-ink">{s.name}</a></li>)}
+            <p className="mb-1 text-[1rem] font-medium md:mb-3">Services</p>
+            <ul className="text-muted md:space-y-2">
+              {services.map((s) => <li key={s.name}><a href={s.href} className="inline-block py-2.5 hover:text-ink md:py-0">{s.name}</a></li>)}
             </ul>
           </div>
         </div>
         <p className="mt-14 flex flex-wrap items-center gap-x-2 text-sm text-muted">
           <span>{site.credit.text}</span>
-          <a href={site.credit.href} target="_blank" rel="noopener" className="rounded-full border border-line px-3 py-1 text-ink transition-colors hover:bg-white/5">
+          <a href={site.credit.href} target="_blank" rel="noopener" className="rounded-full border border-line px-3 py-2 text-ink transition-colors hover:bg-white/5 md:py-1">
             Contact<span className="sr-only-text"> (opens in a new tab)</span>
           </a>
         </p>
