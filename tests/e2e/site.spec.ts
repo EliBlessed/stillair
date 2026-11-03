@@ -153,8 +153,13 @@ test("repair or replace: tabs fit on one line and each gives an answer", async (
   const panel = page.locator("#tool-panel");
   await expect(panel).toContainText("$89–$150"); // Repair: diagnostic visit
   await page.getByRole("tab", { name: "Replace" }).click();
-  await expect(panel).toContainText(/Repair it|Replacing is likely smarter/);
+  await expect(panel).toContainText(/Repair it|Replacing is likely smarter|It depends on the cause/);
   await expect(panel).toContainText("rule of thumb");
+  // no quote needed: the symptom picked in Repair carries over and each likely repair gets a verdict
+  await expect(panel).toContainText("12 × $250 = $3,000"); // capacitor $150–$350 at the default 12 years
+  await expect(panel).toContainText("Replace"); // compressor at 12 years is over $5,000
+  await page.getByText("I already have a repair quote").click();
+  await expect(panel).toContainText("12 × $900 = $10,800");
   await expect(page.getByRole("tab")).toHaveCount(2); // Install lives in the size picker
 });
 

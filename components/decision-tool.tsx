@@ -29,15 +29,24 @@ function Out({ children, need, message, cta }: { children: ReactNode; need: stri
   );
 }
 
-function Repair() {
-  const [id, setId] = useState(repairSymptoms[0].id);
-  const s = repairSymptoms.find((x) => x.id === id)!;
+type Pick = { id: string; setId: (id: string) => void };
+
+function Symptoms({ id, setId }: Pick) {
   return (
     <>
       <p className="mb-4 text-muted" id="sym-q">What is it doing?</p>
       <div role="group" aria-labelledby="sym-q" className="flex flex-wrap gap-2">
         {repairSymptoms.map((x) => <button key={x.id} type="button" className="chip" aria-pressed={x.id === id} onClick={() => setId(x.id)}>{x.label}</button>)}
       </div>
+    </>
+  );
+}
+
+function Repair({ id, setId }: Pick) {
+  const s = repairSymptoms.find((x) => x.id === id)!;
+  return (
+    <>
+      <Symptoms id={id} setId={setId} />
       <Out need="Repair" message={`Symptom: ${s.label}.`} cta="Book a diagnostic visit">
         <div className="grid gap-6 md:gap-8 lg:grid-cols-2 lg:gap-10">
           {/* the likely part, so the answer is a picture first and prices second */}
@@ -58,33 +67,64 @@ function Repair() {
   );
 }
 
-function Replace() {
+const usd = (n: number) => `$${n.toLocaleString("en-US")}`;
+const typical = (r: Range) => Math.round((r.low + r.high) / 2 / 50) * 50; // middle of the range, to the nearest $50
+
+// The $5,000 rule: age × repair cost. No quote needed: each likely repair for the symptom is tested at its typical price.
+function Replace({ id, setId }: Pick) {
   const [age, setAge] = useState(rule.defaultAge);
-  const [quote, setQuote] = useState(rule.defaultQuote);
-  const score = age * quote;
-  const replace = score > rule.limit;
+  const [quote, setQuote] = useState<number | null>(null); // null = no quote yet
+  const s = repairSymptoms.find((x) => x.id === id)!;
+  const repairs = quote === null
+    ? [...s.fixes, ...(s.big ? [s.big] : [])].map((f) => ({ label: f.label, cost: typical(f.range) }))
+    : [{ label: "Your quote", cost: quote }];
+  const over = repairs.filter((r) => r.cost * age > rule.limit).length;
+  const replace = over === repairs.length; // every likely repair fails the test
+  const verdict = over === 0 ? "Repair it" : replace ? "Replacing is likely smarter" : "It depends on the cause";
   return (
     <>
       <p className="mb-8 max-w-2xl text-lg">
-        Got a repair quote on an older unit? Set its age and the quote. Contractors use a simple test: age × quote. Over ${rule.limit.toLocaleString("en-US")}, a new unit usually makes more sense than the repair.
+        Older unit acting up? Pick what it is doing and set its age. Contractors use a simple test: age × repair cost. Over {usd(rule.limit)}, a new unit usually makes more sense than the repair.
       </p>
-      <div className="grid gap-8 md:grid-cols-2">
+      <Symptoms id={id} setId={setId} />
+      <div className="mt-8 grid gap-8 md:grid-cols-2">
         <label className="block">
           <span className="flex justify-between gap-4"><span>How old is your unit?</span><span className="num shrink-0">{age} {age === 1 ? "year" : "years"}</span></span>
           <input type="range" min={rule.ageMin} max={rule.ageMax} value={age} onChange={(e) => setAge(+e.target.value)} />
         </label>
-        <label className="block">
-          <span className="flex justify-between gap-4"><span>What were you quoted to repair it?</span><span className="num shrink-0">${quote.toLocaleString("en-US")}</span></span>
-          <input type="range" min={rule.quoteMin} max={rule.quoteMax} step={rule.quoteStep} value={quote} onChange={(e) => setQuote(+e.target.value)} />
-        </label>
+        <div>
+          <label className="flex items-center gap-3">
+            <input type="checkbox" className="size-5 accent-[var(--color-ice)]" checked={quote !== null} onChange={(e) => setQuote(e.target.checked ? rule.defaultQuote : null)} />
+            <span>I already have a repair quote</span>
+          </label>
+          {quote !== null && (
+            <label className="mt-4 block">
+              <span className="flex justify-between gap-4"><span>Your quote</span><span className="num shrink-0">{usd(quote)}</span></span>
+              <input type="range" min={rule.quoteMin} max={rule.quoteMax} step={rule.quoteStep} value={quote} onChange={(e) => setQuote(+e.target.value)} />
+            </label>
+          )}
+        </div>
       </div>
-      <Out need={replace ? "Replace" : "Repair"} message={`Unit age ${age} years, repair quote $${quote.toLocaleString("en-US")}.`}>
+      <Out need={replace ? "Replace" : "Repair"} message={`Unit age ${age} years. ${quote === null ? `Symptom: ${s.label}.` : `Repair quote ${usd(quote)}.`}`}>
         <p className="text-[clamp(2rem,6vw,3.5rem)] leading-none font-semibold tracking-[-0.03em]" aria-live="polite">
-          {replace ? "Replacing is likely smarter" : "Repair it"}
+          {verdict}
         </p>
-        <p className="small mt-3">
-          The ${rule.limit.toLocaleString("en-US")} rule, a common contractor rule of thumb: <span className="num shrink-0">{age} × ${quote.toLocaleString("en-US")} = ${score.toLocaleString("en-US")}</span>, which is {replace ? "over" : "not over"} <span className="num">${rule.limit.toLocaleString("en-US")}</span>.
-        </p>
+        {over > 0 && !replace && <p className="mt-3 max-w-xl">A cheap fix is worth doing; a big one is not. A diagnostic visit ({usd(prices.diagnostic.low)}–{usd(prices.diagnostic.high)}, credited to the repair) tells you which it is.</p>}
+        <p className="small mt-3">The {usd(rule.limit)} rule, a common contractor rule of thumb.{quote === null && ` Typical South Florida repair prices for "${s.label.toLowerCase()}".`}</p>
+        <div className="mt-6">
+          {repairs.map((r) => {
+            const score = r.cost * age;
+            return (
+              <div key={r.label} className="flex flex-col gap-1 border-t border-line py-4 first:border-t-0 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+                <div>
+                  <p className="font-medium">{r.label}</p>
+                  <p className="small num">{age} × {usd(r.cost)} = {usd(score)}</p>
+                </div>
+                <p className={`text-xl font-semibold whitespace-nowrap ${score > rule.limit ? "text-ice" : ""}`}>{score > rule.limit ? "Replace" : "Repair"}</p>
+              </div>
+            );
+          })}
+        </div>
         <h3 className="mt-8 mb-1 font-medium">If you replace: central (ducted), whole home</h3>
         {central.map((c) => <Row key={c.id} label={c.size} note={c.note} range={c.price} />)}
       </Out>
@@ -94,6 +134,7 @@ function Replace() {
 
 export function DecisionTool() {
   const [tab, setTab] = useState(0);
+  const [id, setId] = useState(repairSymptoms[0].id); // shared, so a symptom picked in Repair carries to Replace
   const onKey = (e: KeyboardEvent) => {
     const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
     if (!d) return;
@@ -117,7 +158,7 @@ export function DecisionTool() {
             ))}
           </div>
           <div id="tool-panel" role="tabpanel" aria-labelledby={`tab-${tab}`}>
-            {tab === 0 ? <Repair /> : <Replace />}
+            {tab === 0 ? <Repair id={id} setId={setId} /> : <Replace id={id} setId={setId} />}
           </div>
         </div>
       </div>
