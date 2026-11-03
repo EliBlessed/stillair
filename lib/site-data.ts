@@ -48,8 +48,8 @@ export const prices = {
 
 export const services = [
   { name: "Repair", href: "/#tools", note: "Diagnose the fault, quote it in writing, fix it." },
-  { name: "Replacement", href: "/#tools", note: "Honest advice on when a repair stops making sense." },
-  { name: "Installation", href: "/#tools", note: "Mini-split and central (ducted) systems, sized properly." },
+  { name: "Replacement", href: "/#replace", note: "Honest advice on when a repair stops making sense." },
+  { name: "Installation", href: "/#size", note: "Mini-split and central (ducted) systems, sized properly." },
   { name: "Tune-ups", href: "/#plans", note: "Catch small problems before a hot week finds them." },
   { name: "Comfort Plan", href: "/#plans", note: "Two tune-ups a year and priority visits." },
 ];

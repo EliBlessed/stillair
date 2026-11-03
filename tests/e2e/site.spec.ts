@@ -221,3 +221,13 @@ test("security headers are sent (same as vercel.json) and the page runs under th
   expect(h["referrer-policy"]).toBe("strict-origin-when-cross-origin");
   expect(h["permissions-policy"]).toContain("camera=()");
 });
+
+test("footer services each open the right part of the page", async ({ page }) => {
+  await page.goto("/");
+  const footer = page.locator("footer");
+  for (const [name, hash, check] of [["Repair", "#tools", "What is it doing?"], ["Replacement", "#replace", "How old is your unit?"], ["Installation", "#size", "6,000 BTU"], ["Comfort Plan", "#plans", "$219"]] as const) {
+    await footer.getByRole("link", { name, exact: true }).last().click(); // last = the Services column
+    await expect(page).toHaveURL(new RegExp(`${hash}$`));
+    await expect(page.locator(hash === "#replace" ? "#tools" : hash)).toContainText(check);
+  }
+});

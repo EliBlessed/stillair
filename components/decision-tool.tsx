@@ -1,5 +1,5 @@
 "use client";
-import { useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useState, type KeyboardEvent, type ReactNode } from "react";
 import { central, prices, repairSymptoms, rule, site, type Range } from "@/lib/site-data";
 import { Money } from "./roll";
 import { Img } from "./img";
@@ -134,6 +134,13 @@ function Replace({ id, setId }: Pick) {
 
 export function DecisionTool() {
   const [tab, setTab] = useState(0);
+  // links to /#replace (footer "Replacement") open the Replace tab
+  useEffect(() => {
+    const open = () => { if (location.hash === "#replace") setTab(1); };
+    open();
+    addEventListener("hashchange", open);
+    return () => removeEventListener("hashchange", open);
+  }, []);
   const [id, setId] = useState(repairSymptoms[0].id); // shared, so a symptom picked in Repair carries to Replace
   const onKey = (e: KeyboardEvent) => {
     const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
@@ -144,6 +151,7 @@ export function DecisionTool() {
   };
   return (
     <section id="tools" className="section">
+      <span id="replace" aria-hidden />
       <div className="wrap">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between md:gap-10">
           <h2 className="h2 max-w-[14ch]" data-reveal>
