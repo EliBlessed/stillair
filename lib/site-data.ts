@@ -57,11 +57,11 @@ export const services = [
 // Pinned labels on the last unit frame. at = dot position in % of the frame (desktop 1280x800, phone 576x1248);
 // cardY = where the desktop card sits; side = which side of the dot the phone tag sits.
 export const parts = [
-  { name: "Fan and motor", note: "We check the blades, bearings and motor draw.", at: [50.5, 24], cardY: 20, phone: [49, 46], side: "right" },
-  { name: "Condenser coil", note: "We check for dirt, damage and poor heat transfer.", at: [43.5, 58], cardY: 35, phone: [36, 64], side: "left" },
-  { name: "Compressor", note: "We check its start, running draw and sound.", at: [51.5, 70], cardY: 50, phone: [52, 70.5], side: "left" },
+  { name: "Fan and motor", note: "We check the blades, bearings and motor draw.", at: [50.5, 24], cardY: 29, phone: [49, 46], side: "right" },
+  { name: "Condenser coil", note: "We check for dirt, damage and poor heat transfer.", at: [43.5, 58], cardY: 41, phone: [36, 64], side: "left" },
+  { name: "Compressor", note: "We check its start, running draw and sound.", at: [51.5, 70], cardY: 53, phone: [52, 70.5], side: "left" },
   { name: "Capacitor", note: "We test it against its rating and look for swelling.", at: [57.4, 74], cardY: 65, phone: [61, 73.5], side: "right" },
-  { name: "Refrigerant lines", note: "We check insulation, kinks and signs of a leak.", at: [38, 72], cardY: 80, phone: [25, 75], side: "right" },
+  { name: "Refrigerant lines", note: "We check insulation, kinks and signs of a leak.", at: [38, 72], cardY: 77, phone: [25, 75], side: "right" },
 ] as const;
 
 // Frame sequences. Drop frame-0001.webp … frame-NNNN.webp into the folder and set `count`.
