@@ -58,6 +58,12 @@ export function DemoForm({ id, fields, submit, prefill }: { id: string; fields: 
       <div id={`${id}-thanks`} tabIndex={-1} role="status" className="card p-7 outline-none md:p-10">
         <h3 className="h2 !text-[clamp(1.75rem,4vw,2.5rem)]">Thank you</h3>
         <p className="mt-4 text-lg">{site.demoThanks}</p>
+        <p className="mt-6 border-t border-line pt-6 text-muted">
+          Want a site like this for your business? It was designed and built by Elijah.{" "}
+          <a href={site.credit.href} target="_blank" rel="noopener" className="text-ink underline underline-offset-4 hover:text-ice">
+            Contact Elijah<span className="sr-only-text"> (opens in a new tab)</span>
+          </a>
+        </p>
         <a href={`#${id}`} className="btn mt-8" onClick={() => { setDone(false); setV({}); }}>Back to the form</a>
       </div>
     );
@@ -98,7 +104,6 @@ export function DemoForm({ id, fields, submit, prefill }: { id: string; fields: 
       })}
       <div className="sm:col-span-2">
         <button type="submit" className="btn btn-ice w-full sm:w-auto">{submit}</button>
-        <p className="small mt-3">Demo form: nothing is sent.</p>
       </div>
     </form>
   );
