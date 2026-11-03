@@ -10,7 +10,7 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], preload: false }); // numbers only: swaps in, keeps ~23 KB off first paint
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://stillair.example"), // placeholder domain: swap on launch
+  metadataBase: new URL(site.url),
   title: { default: `${site.brand}: ${site.tagline} Air conditioning in South Florida`, template: `%s | ${site.brand}` },
   description: "Air-conditioning repair, replacement and installation across South Florida. A demo concept site: placeholder brand, no real bookings.",
   openGraph: { type: "website", siteName: site.brand, images: [{ url: "/media/og.png", width: 1200, height: 630, alt: `${site.brand}: ${site.tagline}` }] },
